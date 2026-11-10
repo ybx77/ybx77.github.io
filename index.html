@@ -67,9 +67,9 @@ svg{display:block;max-width:100%}
 .scene-s3{top:52.5%}
 .scene-s4{top:66%}
 .scene-s5{top:78.5%}
-.scene-drift{animation:sceneDrift 15s ease-in-out infinite alternate}
-.scene-drift-2{animation:sceneDrift 19s ease-in-out infinite alternate-reverse}
-@keyframes sceneDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-16px,0)}}
+.scene-drift{animation:sceneDrift 10s ease-in-out infinite alternate}
+.scene-drift-2{animation:sceneDrift 13s ease-in-out infinite alternate-reverse}
+@keyframes sceneDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(8px,-26px,0)}}
 .bg-finale{position:absolute;left:0;right:0;bottom:0;height:440px}
 .bg-finale svg{width:100%;height:100%}
 @media(max-width:640px){
@@ -78,12 +78,12 @@ svg{display:block;max-width:100%}
   .scene-l{left:-190px}
   .bg-finale{height:380px}
 }
-.bg-spin{transform-origin:center;animation:bgSpin 140s linear infinite}
-.bg-spin-rev{transform-origin:center;animation:bgSpinRev 180s linear infinite}
+.bg-spin{transform-origin:center;animation:bgSpin 48s linear infinite}
+.bg-spin-rev{transform-origin:center;animation:bgSpinRev 72s linear infinite}
 @keyframes bgSpin{to{transform:rotate(360deg)}}
 @keyframes bgSpinRev{to{transform:rotate(-360deg)}}
-.bg-drift{animation:bgDrift 16s ease-in-out infinite alternate}
-@keyframes bgDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-14px,0)}}
+.bg-drift{animation:bgDrift 11s ease-in-out infinite alternate}
+@keyframes bgDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-24px,0)}}
 /* paper grain over everything */
 .grain{position:fixed;inset:0;z-index:74;pointer-events:none;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.62 0 0 0 0 0.78 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
 .grain-dots{position:fixed;inset:0;z-index:73;pointer-events:none;opacity:.35;background-image:radial-gradient(circle,rgba(36,64,126,.16) .8px,transparent 1.3px);background-size:7px 7px;mix-blend-mode:multiply}
@@ -94,17 +94,39 @@ svg{display:block;max-width:100%}
    artwork. Every word of content — header, hero, projects — sits below it
    in the document, so it can only be reached by swiping / scrolling up. */
 .intro-stage{position:relative;z-index:3;height:100svh;min-height:480px;display:grid;place-items:center;overflow:hidden}
-.intro-art{width:min(680px,92vw)}
+.intro-art{width:min(680px,92vw);animation:introIn 1.1s var(--ease) both}
 .intro-art svg{width:100%;height:auto;overflow:visible}
-.intro-spin{transform-origin:360px 258px;animation:bgSpin 52s linear infinite}
-.intro-spin-rev{transform-origin:360px 258px;animation:bgSpinRev 74s linear infinite}
-.intro-float{animation:introFloat 7s ease-in-out infinite alternate}
-.intro-float-2{animation:introFloat 9s ease-in-out infinite alternate-reverse}
-@keyframes introFloat{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-14px,0)}}
-.intro-pulse{animation:introPulse 2.6s ease-in-out infinite}
-@keyframes introPulse{0%,100%{opacity:1}50%{opacity:.25}}
-.intro-chevron{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);animation:introBob 2.2s ease-in-out infinite}
-@keyframes introBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(9px)}}
+@keyframes introIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+/* fast enough to read as motion at a glance: the outer ring turns a full
+   circle in 16s, the inner in 26s, and two solid satellites orbit on their
+   own tracks in 9s / 14s so something is always visibly travelling */
+.intro-spin{transform-origin:360px 258px;animation:bgSpin 16s linear infinite}
+.intro-spin-rev{transform-origin:360px 258px;animation:bgSpinRev 26s linear infinite}
+.intro-orbit{transform-origin:360px 258px;animation:bgSpin 9s linear infinite}
+.intro-orbit-rev{transform-origin:360px 258px;animation:bgSpinRev 14s linear infinite}
+.intro-float{animation:introFloat 4.6s ease-in-out infinite alternate}
+.intro-float-2{animation:introFloat 6s ease-in-out infinite alternate-reverse}
+@keyframes introFloat{from{transform:translate3d(0,0,0)}to{transform:translate3d(10px,-26px,0)}}
+.intro-pulse{transform-box:fill-box;transform-origin:center;animation:introPulse 1.9s ease-in-out infinite}
+@keyframes introPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.3)}}
+.intro-ripple{fill:none;transform-box:fill-box;transform-origin:center;animation:introRipple 2.4s ease-out infinite}
+.intro-ripple-2{animation-delay:1.2s}
+@keyframes introRipple{0%{transform:scale(.55);opacity:.95}70%{opacity:.3}100%{transform:scale(2.5);opacity:0}}
+.intro-twinkle circle{animation:introTwinkle 1.7s ease-in-out infinite}
+.intro-twinkle circle:nth-child(2){animation-delay:.3s}
+.intro-twinkle circle:nth-child(3){animation-delay:.6s}
+.intro-twinkle circle:nth-child(4){animation-delay:.9s}
+.intro-twinkle circle:nth-child(5){animation-delay:1.2s}
+.intro-twinkle circle:nth-child(6){animation-delay:.45s}
+.intro-twinkle circle:nth-child(7){animation-delay:1.5s}
+@keyframes introTwinkle{0%,100%{opacity:1}50%{opacity:.1}}
+.intro-blink{animation:introBlink 1.15s steps(2,jump-none) infinite}
+@keyframes introBlink{0%,100%{opacity:1}50%{opacity:.15}}
+.intro-chevron{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);animation:introBob 1.6s ease-in-out infinite}
+.intro-chevron path{animation:chevFade 1.6s ease-in-out infinite}
+.intro-chevron path.ch-b{animation-delay:.32s}
+@keyframes chevFade{0%,100%{opacity:.2}50%{opacity:1}}
+@keyframes introBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(13px)}}
 
 /* ---------- retro window chrome ---------- */
 .win{background:var(--win);border:2px solid var(--line);box-shadow:var(--shadow)}
@@ -135,17 +157,17 @@ nav a.gh:hover{background:var(--blue);color:#fff}
 .lang-switch button.active{background:var(--navy);color:#fff}
 
 /* ---------- reveal : restrained scroll-in ---------- */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--delay,0s)}
-.reveal[data-variant="left"]{transform:translateX(-24px)}
-.reveal[data-variant="right"]{transform:translateX(24px)}
+.reveal{opacity:0;transform:translateY(38px) scale(.96);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--delay,0s)}
+.reveal[data-variant="left"]{transform:translateX(-44px)}
+.reveal[data-variant="right"]{transform:translateX(44px)}
 .reveal.in{opacity:1;transform:none}
 /* slide-only reveal for containers holding controls: never gated by opacity */
-.reveal-slide{transform:translateY(20px);transition:transform .8s var(--ease)}
+.reveal-slide{transform:translateY(36px);transition:transform .9s var(--ease)}
 .reveal-slide.in{transform:none}
 /* cards keep full opacity before entry (links stay usable), only rise/settle */
-.scroll-card{transform:translateY(26px);transition:transform .8s var(--ease);transition-delay:var(--delay,0s)}
+.scroll-card{transform:translateY(44px);transition:transform .9s var(--ease);transition-delay:var(--delay,0s)}
 .scroll-card.in{transform:var(--rest,none)}
-.scroll-card.in:hover{transform:var(--rest,none) translateY(-4px)}
+.scroll-card.in:hover{transform:var(--rest,none) translateY(-7px)}
 
 /* ---------- hero : overlapping windows ---------- */
 .hero{position:relative;padding:64px 0 30px;min-height:calc(100svh - 90px)}
@@ -171,8 +193,8 @@ nav a.gh:hover{background:var(--blue);color:#fff}
 .stat strong i{font-style:normal;color:var(--orange);font-size:19px;font-family:var(--pix)}
 .stat span{display:block;margin-top:4px;color:var(--muted);font-size:12px}
 .scroll-cue{display:flex;align-items:center;gap:10px;margin-top:22px;color:var(--muted);font-family:var(--mono);font-size:10.5px;letter-spacing:.24em}
-.scroll-cue .chev{color:var(--orange);animation:cueBob 2.2s ease-in-out infinite;font-size:13px}
-@keyframes cueBob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.scroll-cue .chev{color:var(--orange);animation:cueBob 1.5s ease-in-out infinite;font-size:13px}
+@keyframes cueBob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 .scroll-cue .line{width:56px;height:2px;background:repeating-linear-gradient(90deg,var(--dim) 0 5px,transparent 5px 10px)}
 .console-win{position:relative;z-index:2;margin-top:74px;margin-left:-46px;transform:rotate(.6deg)}
 .console-win .win-body{padding:18px 18px 14px;background:#f2f7fb}
@@ -208,7 +230,8 @@ nav a.gh:hover{background:var(--blue);color:#fff}
 .flag{display:inline-flex;align-items:center;gap:7px;background:var(--orange);color:#fff;border:2px solid #8a4305;font-family:var(--pix);font-size:13px;padding:3px 10px;margin-bottom:16px;box-shadow:2.5px 2.5px 0 rgba(23,43,99,.6)}
 .p-meta{display:flex;flex-wrap:wrap;gap:7px 14px;font-size:12px;color:var(--muted);align-items:center;font-family:var(--mono)}
 .lang-dot{width:9px;height:9px;display:inline-block;margin-right:6px;border:1.5px solid var(--line);vertical-align:-1px}
-.featured-card{cursor:pointer;transition:transform .25s var(--ease)}
+.featured-card{cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.featured-card:hover,.proj-card:hover{box-shadow:12px 12px 0 rgba(23,43,99,.9)}
 .featured-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(380px,1.05fr)}
 .featured-copy{padding:26px 28px 28px;display:flex;flex-direction:column;align-items:flex-start}
 .featured-copy h3,.proj-title{font-family:var(--pix);font-weight:400;letter-spacing:.01em;color:var(--ink)}
@@ -225,7 +248,7 @@ nav a.gh:hover{background:var(--blue);color:#fff}
 .open-hint{margin-left:auto;font-family:var(--mono);color:var(--blue);font-size:12px;letter-spacing:.08em}
 .featured-visual{border-left:2px solid var(--line);min-height:380px}
 .proj-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:30px 26px;margin-top:34px;align-items:start}
-.proj-card{cursor:pointer;transition:transform .25s var(--ease)}
+.proj-card{cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
 .layout-cc-quota-monitor{grid-column:span 7}
 .layout-perler-bead-pattern{grid-column:span 5;margin-top:44px}
 .layout-grade-ocr-entry{grid-column:2/12;margin-top:6px}
@@ -242,7 +265,7 @@ nav a.gh:hover{background:var(--blue);color:#fff}
 .sync-svg{width:min(520px,100%);height:auto;overflow:visible}
 .sync-path{fill:none;stroke:rgba(43,74,203,.45);stroke-width:2;stroke-dasharray:7 9;animation:dashMove 1.6s linear infinite}
 @keyframes dashMove{to{stroke-dashoffset:-16}}
-.sync-ring{fill:none;stroke:rgba(43,74,203,.25);stroke-width:1;stroke-dasharray:3 8;transform-origin:center;animation:ringSpin 18s linear infinite}
+.sync-ring{fill:none;stroke:rgba(43,74,203,.25);stroke-width:1;stroke-dasharray:3 8;transform-origin:center;animation:ringSpin 10s linear infinite}
 @keyframes ringSpin{to{transform:rotate(360deg)}}
 .visual-quota{padding:48px 24px 24px}
 .quota-window{max-width:480px;margin:0 auto;border:2px solid var(--line);background:#fff;padding:16px 18px 13px;box-shadow:var(--shadow-sm)}
@@ -264,7 +287,7 @@ nav a.gh:hover{background:var(--blue);color:#fff}
 .ocr-lines{position:relative;display:grid;gap:10px;overflow:hidden}
 .ocr-lines i{display:block;height:8px;background:#b9cfe8}
 .ocr-lines i:nth-child(1){width:62%}.ocr-lines i:nth-child(2){width:88%}.ocr-lines i:nth-child(3){width:74%}.ocr-lines i:nth-child(4){width:52%}
-.scan-beam{position:absolute;left:-6px;right:-6px;height:2px;background:var(--orange);animation:scanMove 2.8s ease-in-out infinite}
+.scan-beam{position:absolute;left:-6px;right:-6px;height:2px;background:var(--orange);animation:scanMove 2.1s ease-in-out infinite}
 @keyframes scanMove{0%,100%{top:0}50%{top:calc(100% - 2px)}}
 .ocr-result{display:flex;gap:7px;margin-top:16px;flex-wrap:wrap}
 .ocr-result span{font-family:var(--mono);font-size:10.5px;color:var(--navy);border:1.5px solid var(--line);background:#eef5fb;padding:3px 8px}
@@ -419,7 +442,7 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
       </svg>
     </div>
     <!-- S3 : stepped terraces + mast, right — late projects -->
-    <div class="scene scene-r scene-s3">
+    <div class="scene scene-r scene-s3 scene-drift-2">
       <svg viewBox="0 0 480 340" fill="none">
         <path d="M60 340 v-40 h360 v40 z" fill="#8fc3ee"/>
         <path d="M104 300 v-36 h272 v36 z" fill="#a9d2f4"/>
@@ -452,7 +475,7 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
       </svg>
     </div>
     <!-- S5 : wireframe polyhedra pair, right — stack / footer approach -->
-    <div class="scene scene-r scene-s5">
+    <div class="scene scene-r scene-s5 scene-drift">
       <svg viewBox="0 0 480 360" fill="none" stroke="#5ea3e6">
         <g opacity=".6" stroke-width="1.7">
           <path d="M150 60 l72 42 v84 l-72 42 l-72 -42 v-84 z"/>
@@ -590,7 +613,7 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
         <path d="M614 376 v-26 h212 v26 z" fill="#79c0f2"/>
         <path d="M660 350 v-22 h120 v22 z" fill="#a8d8f8"/>
         <rect x="713" y="282" width="14" height="46" fill="#79c0f2"/>
-        <circle cx="720" cy="268" r="13" fill="#ef7d1a"/>
+        <circle class="intro-pulse" cx="720" cy="268" r="13" fill="#ef7d1a"/>
         <circle cx="720" cy="268" r="22" stroke="#a8d8f8" stroke-width="1.6" stroke-dasharray="4 6"/>
       </g>
       <!-- signal dish silhouette, right -->
@@ -598,7 +621,7 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
         <path d="M1252 440 l24 -104 h13 l24 104 z" fill="#3f63c8"/>
         <path d="M1282 336 a66 66 0 0 1 66 -66 l-12 40 a41 41 0 0 0 -41 41 z" fill="#79c0f2"/>
         <path d="M1314 306 l46 -46" stroke="#a8d8f8" stroke-width="2.4"/>
-        <circle cx="1366" cy="254" r="5.5" fill="#e8442e"/>
+        <circle class="intro-blink" cx="1366" cy="254" r="5.5" fill="#e8442e"/>
       </g>
       <path d="M0 440 h1440" stroke="#0d1530" stroke-width="3"/>
     </svg>
@@ -616,7 +639,7 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
       <g class="intro-spin">
         <circle cx="360" cy="258" r="196" stroke="#7cc1f2" stroke-width="26" opacity=".45"/>
         <circle cx="360" cy="258" r="238" stroke="#8fc0ea" stroke-width="1.6" stroke-dasharray="4 11" opacity=".85"/>
-        <circle cx="598" cy="258" r="7" fill="#e8442e"/>
+        <circle class="intro-blink" cx="598" cy="258" r="7" fill="#e8442e"/>
         <rect x="128" y="66" width="10" height="10" fill="#ef7d1a" opacity=".9"/>
       </g>
       <g class="intro-spin-rev">
@@ -624,6 +647,17 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
         <circle cx="360" cy="258" r="154" stroke="#5ea3e6" stroke-width="1.5" stroke-dasharray="3 9" opacity=".8"/>
         <circle cx="232" cy="258" r="5.5" fill="#2b4acb"/>
       </g>
+      <!-- satellites on their own fast tracks: always visibly travelling -->
+      <g class="intro-orbit">
+        <circle cx="360" cy="20" r="7.5" fill="#2b4acb"/>
+        <rect x="350" y="4" width="20" height="6" fill="#79c0f2"/>
+        <rect x="350" y="30" width="20" height="6" fill="#79c0f2"/>
+      </g>
+      <g class="intro-orbit-rev">
+        <rect x="507" y="251" width="14" height="14" fill="#ef7d1a"/>
+        <circle cx="206" cy="258" r="4.5" fill="#e8442e"/>
+      </g>
+      <circle class="intro-ripple" cx="360" cy="258" r="22" stroke="#2b4acb" stroke-width="2"/>
       <circle cx="360" cy="258" r="9" fill="#2b4acb"/>
       <circle class="intro-pulse" cx="360" cy="258" r="22" stroke="#79c0f2" stroke-width="1.6" stroke-dasharray="4 6"/>
       <g class="intro-float" stroke="#5ea3e6" stroke-width="1.8" opacity=".75">
@@ -647,6 +681,7 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
         <path d="M494 486 v-22 h102 v22 z" fill="#a9d2f4"/>
         <path d="M516 464 v-18 h58 v18 z" fill="#c2def8"/>
         <rect x="540" y="402" width="10" height="44" fill="#5ea3e6"/>
+        <circle class="intro-ripple intro-ripple-2" cx="545" cy="392" r="16" stroke="#ef7d1a" stroke-width="2"/>
         <circle class="intro-pulse" cx="545" cy="392" r="9" fill="#ef7d1a"/>
         <circle cx="545" cy="392" r="16" stroke="#79c0f2" stroke-width="1.6" stroke-dasharray="3 5"/>
       </g>
@@ -654,17 +689,22 @@ footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
         <path d="M84 84 h64 M116 52 v64"/>
         <circle cx="116" cy="84" r="44" stroke-dasharray="4 9"/>
       </g>
-      <g fill="#8fc0ea">
+      <g class="intro-twinkle" fill="#8fc0ea">
         <circle cx="212" cy="120" r="3"/><circle cx="520" cy="96" r="2.6"/><circle cx="618" cy="180" r="3"/>
         <circle cx="96" cy="300" r="2.4"/><circle cx="648" cy="330" r="2.4"/><circle cx="252" cy="452" r="2.6"/>
         <circle cx="432" cy="470" r="2.2"/>
       </g>
+      <!-- meteor: a lit dot crossing the sky on a 4.5s loop -->
+      <circle r="4.5" fill="#e8442e">
+        <animateMotion dur="4.5s" repeatCount="indefinite" path="M-30 168 L750 62"/>
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.82;1" dur="4.5s" repeatCount="indefinite"/>
+      </circle>
       <rect x="618" y="452" width="8" height="8" fill="#2b4acb" opacity=".55"/>
       <path d="M20 512 h680" stroke="#24407e" stroke-width="2" opacity=".7"/>
     </svg>
   </div>
   <div class="intro-chevron">
-    <svg width="36" height="22" viewBox="0 0 36 22" fill="none"><path d="M4 4 l14 13 L32 4" stroke="#ef7d1a" stroke-width="3.4" stroke-linecap="square"/></svg>
+    <svg width="40" height="32" viewBox="0 0 40 32" fill="none"><path class="ch-a" d="M5 4 l15 12 L35 4" stroke="#ef7d1a" stroke-width="3.4" stroke-linecap="square"/><path class="ch-b" d="M5 17 l15 12 L35 17" stroke="#ef7d1a" stroke-width="3.4" stroke-linecap="square"/></svg>
   </div>
 </section>
 
@@ -1051,9 +1091,9 @@ function initScrollChrome(){
     var max=document.documentElement.scrollHeight-window.innerHeight;
     bar.style.width=(max>0?(y/max*100):0)+"%";
     if(!reduceMotion){
-      if(far)far.style.transform="translate3d(0,"+(y*0.05)+"px,0)";
-      if(mid)mid.style.transform="translate3d(0,"+(y*0.1)+"px,0)";
-      if(near)near.style.transform="translate3d(0,"+(Math.min(y*0.16,110))+"px,0)";
+      if(far)far.style.transform="translate3d(0,"+(y*0.07)+"px,0)";
+      if(mid)mid.style.transform="translate3d(0,"+(y*0.14)+"px,0)";
+      if(near)near.style.transform="translate3d(0,"+(Math.min(y*0.22,150))+"px,0)";
     }
     ticking=false;
   }
