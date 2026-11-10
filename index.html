@@ -3,573 +3,796 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<meta name="color-scheme" content="dark"/>
+<meta name="color-scheme" content="light"/>
 <link rel="icon" href="data:,"/>
 <title>Elowen — 个人博客</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a0c0b;
-  --panel:#151815;
-  --panel-2:#1b1f1b;
-  --line:#2b302b;
-  --line-strong:#454c44;
-  --ink:#f2ecdc;
-  --body:#c6c1b1;
-  --muted:#9b9789;
-  --dim:#6e7167;
-  --amber:#e09a4f;
-  --amber-bright:#f4bd76;
-  --amber-ink:#1b1207;
+  --paper:#e8eff7;
+  --paper-2:#f7fafc;
+  --win:rgba(247,250,252,.93);
+  --ink:#16265e;
+  --navy:#1d3266;
+  --blue:#2b4acb;
+  --sky:#79c0f2;
+  --sky-lt:#a8d8f8;
+  --line:#24407e;
+  --body:#333f6b;
+  --muted:#5c6d99;
+  --dim:#8593b5;
+  --red:#e8442e;
+  --orange:#ef7d1a;
+  --bar:linear-gradient(180deg,#a9ddf8 0%,#7cc1f2 55%,#6ab4ec 100%);
+  --shadow:7px 7px 0 rgba(23,43,99,.9);
+  --shadow-sm:4px 4px 0 rgba(23,43,99,.85);
   --ease:cubic-bezier(.22,.8,.24,1);
-  --shadow:0 24px 70px rgba(0,0,0,.36);
-  /* neutral liquid glass (dark): near-transparent tint, no colour cast.
-     The material is carried by a low blur at natural saturation, an edge
-     lens and a faint specular edge — never by a spectrum rim or a wash. */
-  --glass-tint:rgba(255,255,255,.03);
-  --glass-blur:blur(6px) saturate(102%) brightness(1.02);
-  --glass-rim:0 24px 60px -12px rgba(0,0,0,.5),0 4px 14px rgba(0,0,0,.2),inset 0 1px 1px rgba(255,255,255,.28),inset 0 -1px 1px rgba(255,255,255,.08),inset 1px 0 1px -.5px rgba(255,255,255,.14),inset -1px 0 1px -.5px rgba(255,255,255,.14);
+  --pix:"DotGothic16","Noto Sans SC","Noto Sans JP",sans-serif;
+  --vt:"VT323","JetBrains Mono",monospace;
+  --mono:"JetBrains Mono",monospace;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans SC","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.65;overflow-x:hidden}
+body{margin:0;position:relative;background:linear-gradient(180deg,#eef4fa 0%,#e2ecf6 46%,#d8e6f3 100%);color:var(--ink);font-family:"Noto Sans SC","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.65;overflow-x:hidden}
 body.modal-open{overflow:hidden}
-::selection{background:var(--amber);color:var(--amber-ink)}
+::selection{background:var(--sky-lt);color:var(--ink)}
 a{color:inherit}
 button,input{font:inherit}
 button{cursor:pointer}
 svg{display:block;max-width:100%}
-.mono{font-family:"JetBrains Mono",monospace}
-.wrap{width:min(1120px,calc(100% - 44px));margin:0 auto;position:relative;z-index:2}
+.mono{font-family:var(--mono)}
+.wrap{width:min(1140px,calc(100% - 44px));margin:0 auto;position:relative;z-index:2}
 
-/* ---------- background : layered patterns ---------- */
-.bg-scene{position:fixed;inset:0;z-index:-4;overflow:hidden;background:
-  linear-gradient(180deg,#0d100e 0%,#0a0c0b 42%,#090b0a 100%)}
-.bg-glow{position:absolute;border-radius:50%;filter:blur(110px);will-change:transform,opacity}
-.bg-glow.a{width:640px;height:640px;left:-140px;top:-220px;background:radial-gradient(circle,rgba(224,154,79,.10),transparent 68%);animation:glowA 22s ease-in-out infinite alternate}
-.bg-glow.b{width:720px;height:720px;right:-200px;top:6%;background:radial-gradient(circle,rgba(242,236,220,.045),transparent 68%);animation:glowB 26s ease-in-out infinite alternate}
-.bg-glow.c{width:780px;height:780px;left:28%;bottom:-420px;background:radial-gradient(circle,rgba(224,154,79,.055),transparent 68%);animation:glowA 30s ease-in-out infinite alternate-reverse}
-.bg-glow.d{width:560px;height:560px;left:-170px;top:52%;background:radial-gradient(circle,rgba(242,236,220,.03),transparent 68%);animation:glowB 28s ease-in-out infinite alternate-reverse}
-@keyframes glowA{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(70px,36px,0) scale(1.08)}}
-@keyframes glowB{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(-64px,44px,0) scale(.97)}}
-/* fine grid — now runs the full height, strongest at the top */
-.bg-grid{position:absolute;inset:-120px 0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cpath d='M72 .5H0M.5 0v72' fill='none' stroke='%23f2ecdc' stroke-opacity='.055'/%3E%3C/svg%3E");
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.72) 38%,rgba(0,0,0,.42) 72%,rgba(0,0,0,.55) 100%);
-          mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.72) 38%,rgba(0,0,0,.42) 72%,rgba(0,0,0,.55) 100%);
-  will-change:transform}
-/* dot matrix over the whole page */
-.bg-dots{position:absolute;inset:-80px 0;
-  background-image:radial-gradient(circle,rgba(242,236,220,.13) 1px,transparent 1.6px);
-  background-size:26px 26px;
-  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 12%,#000 86%,transparent 100%);
-          mask-image:linear-gradient(180deg,transparent 0%,#000 12%,#000 86%,transparent 100%);
-  opacity:.5;will-change:transform}
-/* sparse plus / cross registration marks */
-.bg-crosses{position:absolute;inset:-60px 0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='144' height='144' viewBox='0 0 144 144'%3E%3Cpath d='M72 64v16M64 72h16' stroke='%23f2ecdc' stroke-opacity='.10' stroke-width='1.4'/%3E%3Ccircle cx='72' cy='72' r='2' fill='%23f2ecdc' fill-opacity='.12'/%3E%3C/svg%3E");
-  background-size:144px 144px;opacity:.45;will-change:transform}
-/* diagonal hatch, anchored to the lower half */
-.bg-hatch{position:absolute;left:0;right:0;bottom:0;height:46%;
-  background-image:repeating-linear-gradient(-45deg,rgba(242,236,220,.035) 0 1px,transparent 1px 14px);
-  -webkit-mask-image:linear-gradient(180deg,transparent,#000 55%);
-          mask-image:linear-gradient(180deg,transparent,#000 55%)}
-/* blueprint ornaments: concentric rings + ticks, drift / rotate on scroll */
-.bg-orn{position:absolute;color:rgba(242,236,220,.09);pointer-events:none;will-change:transform}
-.bg-orn svg{width:100%;height:100%;overflow:visible}
-.bg-orn .spin{transform-origin:50% 50%;animation:ornSpin 90s linear infinite}
-.bg-orn .spin-rev{transform-origin:50% 50%;animation:ornSpinRev 120s linear infinite}
-@keyframes ornSpin{to{transform:rotate(360deg)}}
-@keyframes ornSpinRev{to{transform:rotate(-360deg)}}
-.bg-orn.one{width:560px;height:560px;right:-170px;top:9%}
-.bg-orn.two{width:420px;height:420px;left:-150px;top:52%;color:rgba(242,236,220,.07)}
-.bg-orn.three{width:300px;height:300px;right:6%;top:76%;color:rgba(242,236,220,.05)}
-.bg-horizon{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(244,189,118,.35),transparent)}
-#bgCanvas{position:fixed;inset:0;z-index:-3;width:100%;height:100%;opacity:.55;pointer-events:none}
-.bg-vignette{position:fixed;inset:0;z-index:70;pointer-events:none;box-shadow:inset 0 0 170px rgba(0,0,0,.5)}
-.noise{position:fixed;inset:0;z-index:75;pointer-events:none;opacity:.032;mix-blend-mode:screen;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E")}
-.scroll-progress{position:fixed;left:0;top:0;height:3px;width:0;background:var(--amber);z-index:130}
+/* ---------- background : one continuous full-page illustration ----------
+   The scene is absolutely positioned over the whole document height (not
+   fixed to the viewport), so the artwork runs from the hero to the footer:
+   a blueprint grid underlay, the hero cluster, a sequence of large motifs
+   spaced down the page, and a deep-blue night panorama closing the page. */
+.bg-scene{position:absolute;top:0;bottom:0;left:0;right:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(36,64,126,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(36,64,126,.055) 1px,transparent 1px);background-size:54px 54px}
+.bg-layer{position:absolute;left:0;right:0;will-change:transform}
+.bg-far{top:-40px;height:1080px}
+.bg-mid{top:0;height:1040px}
+.bg-near{top:620px;height:470px}
+.bg-layer svg{width:100%;height:100%}
+.bg-flow{position:absolute;inset:0}
+.scene{position:absolute;width:min(600px,88vw);opacity:.9}
+.scene svg{width:100%;height:auto}
+.scene-r{right:-170px}
+.scene-l{left:-170px}
+.scene-s1{top:24.5%}
+.scene-s2{top:37%}
+.scene-s3{top:52.5%}
+.scene-s4{top:66%}
+.scene-s5{top:78.5%}
+.scene-drift{animation:sceneDrift 15s ease-in-out infinite alternate}
+.scene-drift-2{animation:sceneDrift 19s ease-in-out infinite alternate-reverse}
+@keyframes sceneDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-16px,0)}}
+.bg-finale{position:absolute;left:0;right:0;bottom:0;height:440px}
+.bg-finale svg{width:100%;height:100%}
+@media(max-width:640px){
+  .scene{opacity:.75}
+  .scene-r{right:-190px}
+  .scene-l{left:-190px}
+  .bg-finale{height:380px}
+}
+.bg-spin{transform-origin:center;animation:bgSpin 140s linear infinite}
+.bg-spin-rev{transform-origin:center;animation:bgSpinRev 180s linear infinite}
+@keyframes bgSpin{to{transform:rotate(360deg)}}
+@keyframes bgSpinRev{to{transform:rotate(-360deg)}}
+.bg-drift{animation:bgDrift 16s ease-in-out infinite alternate}
+@keyframes bgDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-14px,0)}}
+/* paper grain over everything */
+.grain{position:fixed;inset:0;z-index:74;pointer-events:none;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.62 0 0 0 0 0.78 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain-dots{position:fixed;inset:0;z-index:73;pointer-events:none;opacity:.35;background-image:radial-gradient(circle,rgba(36,64,126,.16) .8px,transparent 1.3px);background-size:7px 7px;mix-blend-mode:multiply}
+.scroll-progress{position:fixed;left:0;top:0;height:3px;width:0;background:var(--orange);z-index:130}
 
-/* ---------- header ---------- */
-header{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),rgba(10,12,11,.42);backdrop-filter:blur(6px) saturate(102%) brightness(1.02);-webkit-backdrop-filter:blur(6px) saturate(102%) brightness(1.02);border-bottom:1px solid rgba(255,255,255,.10);box-shadow:inset 0 -1px 0 rgba(255,255,255,.03),0 12px 32px rgba(0,0,0,.20)}
-header.scrolled{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012)),rgba(10,12,11,.62);box-shadow:inset 0 -1px 0 rgba(255,255,255,.04),0 14px 40px rgba(0,0,0,.28)}
-.header-in{display:flex;align-items:center;gap:20px;min-height:66px;flex-wrap:wrap;padding:8px 0}
-.wordmark{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:"Noto Serif SC",serif;font-weight:900;font-size:20px}
-.wordmark-mark{width:33px;height:33px;border:1px solid rgba(224,154,79,.55);border-radius:50%;display:grid;place-items:center;color:var(--amber);font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:700}
-nav{display:flex;align-items:center;gap:4px;margin-left:auto}
-nav a{font-size:14px;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:999px;transition:color .25s,background .25s}
-nav a:hover{color:var(--ink);background:rgba(242,236,220,.06)}
-nav a.gh{color:var(--amber-ink);background:var(--amber);font-weight:800}
-nav a.gh:hover{background:var(--amber-bright);color:var(--amber-ink)}
-.lang-switch{display:flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(21,24,21,.7)}
-.lang-switch button{border:0;background:transparent;color:var(--muted);font-size:12.5px;font-weight:700;padding:6px 11px;border-radius:999px;line-height:1;transition:all .2s}
-.lang-switch button:hover{color:var(--ink)}
-.lang-switch button.active{background:var(--ink);color:#171711}
+/* ---------- intro : one full screen of pure animation, no text ----------
+   The opening screen is exactly one viewport tall and holds only animated
+   artwork. Every word of content — header, hero, projects — sits below it
+   in the document, so it can only be reached by swiping / scrolling up. */
+.intro-stage{position:relative;z-index:3;height:100svh;min-height:480px;display:grid;place-items:center;overflow:hidden}
+.intro-art{width:min(680px,92vw)}
+.intro-art svg{width:100%;height:auto;overflow:visible}
+.intro-spin{transform-origin:360px 258px;animation:bgSpin 52s linear infinite}
+.intro-spin-rev{transform-origin:360px 258px;animation:bgSpinRev 74s linear infinite}
+.intro-float{animation:introFloat 7s ease-in-out infinite alternate}
+.intro-float-2{animation:introFloat 9s ease-in-out infinite alternate-reverse}
+@keyframes introFloat{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-14px,0)}}
+.intro-pulse{animation:introPulse 2.6s ease-in-out infinite}
+@keyframes introPulse{0%,100%{opacity:1}50%{opacity:.25}}
+.intro-chevron{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);animation:introBob 2.2s ease-in-out infinite}
+@keyframes introBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(9px)}}
 
-/* ---------- reveal : scroll-triggered ---------- */
-.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:var(--delay,0s);filter:blur(3px)}
-.reveal[data-variant="left"]{transform:translateX(-38px)}
-.reveal[data-variant="right"]{transform:translateX(38px)}
-.reveal[data-variant="scale"]{transform:translateY(18px) scale(.965)}
-.reveal.in{opacity:1;transform:none;filter:none}
-/* project cards: rise, un-blur and settle when they enter the viewport.
-   Opacity stays 1 in the pre-entry state so the cards and their links are
-   never inert / invisible before the trigger fires. */
-.scroll-card{transform:translateY(46px) scale(.975);filter:blur(5px) saturate(.75);transition:transform .85s var(--ease),filter .85s var(--ease),border-color .35s,box-shadow .35s;transition-delay:var(--delay,0s),var(--delay,0s),0s,0s}
-.scroll-card.in{transform:none;filter:none}
-.scroll-card.in:hover{transform:translateY(-5px)}
-.featured-card.scroll-card.in:hover{transform:translateY(-4px)}
-/* slide-only reveal for containers holding controls (toolbar): never fades out */
-.reveal-slide{transform:translateY(26px) scale(.985);filter:blur(3px);transition:transform .85s var(--ease),filter .85s var(--ease);transition-delay:var(--delay,0s)}
-.reveal-slide.in{transform:none;filter:none}
-/* section rule draws itself across */
-.sec-rule.reveal{transform:scaleX(0);transform-origin:left center;filter:none;transition:transform 1s var(--ease),opacity .6s var(--ease);transition-delay:.08s}
-.sec-rule.reveal.in{transform:scaleX(1)}
-/* scroll cue under the hero stats */
-.scroll-cue{display:flex;align-items:center;gap:12px;margin-top:34px;color:var(--dim);font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.22em}
-.scroll-cue .track{width:22px;height:36px;border:1px solid var(--line-strong);border-radius:999px;display:flex;justify-content:center;padding-top:7px}
-.scroll-cue .track::after{content:"";width:4px;height:8px;border-radius:99px;background:var(--amber);animation:cueDrop 1.9s var(--ease) infinite}
-@keyframes cueDrop{0%{transform:translateY(0);opacity:1}70%{transform:translateY(12px);opacity:0}100%{transform:translateY(0);opacity:0}}
-.scroll-cue .line{width:52px;height:1px;background:linear-gradient(90deg,var(--line-strong),transparent)}
+/* ---------- retro window chrome ---------- */
+.win{background:var(--win);border:2px solid var(--line);box-shadow:var(--shadow)}
+.win-bar{display:flex;align-items:center;gap:8px;background:var(--bar);border-bottom:2px solid var(--line);padding:5px 8px 5px 11px;font-family:var(--pix);font-size:15px;letter-spacing:.05em;color:#0f2350;line-height:1.3;user-select:none}
+.win-bar .wb-ico{font-family:var(--mono);font-size:11px;background:var(--paper-2);border:1.5px solid var(--line);padding:1px 5px;line-height:1.2}
+.win-btns{margin-left:auto;display:flex;gap:5px;flex:none}
+.win-btns i{width:17px;height:17px;border:1.5px solid var(--line);background:#eaf4fc;display:grid;place-items:center;font-style:normal;font-family:var(--mono);font-size:9px;line-height:1;color:var(--navy);box-shadow:1.5px 1.5px 0 rgba(23,43,99,.55)}
+.win-btns i.hot{background:var(--red);color:#fff;border-color:#8f1f10}
+.win-body{padding:24px 26px 26px}
 
-/* ---------- hero ---------- */
-.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(400px,.95fr);gap:52px;align-items:center;padding:76px 0 84px;min-height:calc(100svh - 66px)}
-.hero-kicker{display:inline-flex;align-items:center;gap:11px;color:var(--amber-bright);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
-.hero-kicker::before{content:"";width:36px;height:1px;background:var(--amber)}
-.hero h1{font-family:"Noto Serif SC",serif;font-weight:900;font-size:clamp(48px,6.8vw,88px);line-height:1.08;letter-spacing:-.03em;margin:0 0 22px}
-.line-mask{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
-.line-inner{display:block;animation:lineRise 1s var(--ease) both;animation-delay:var(--d,0s)}
-.line-inner em{font-style:normal;color:var(--amber)}
-@keyframes lineRise{from{transform:translateY(112%);opacity:0}to{transform:none;opacity:1}}
-.hero-lede{font-size:clamp(16px,1.9vw,18.5px);line-height:1.85;color:var(--body);max-width:560px;margin:0 0 30px}
+/* ---------- header : a slim window strip ---------- */
+header{position:sticky;top:10px;z-index:60;margin-top:10px}
+.header-in{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+header .win{width:100%}
+header .win-bar{padding-top:6px;padding-bottom:6px;flex-wrap:wrap;row-gap:5px}
+.wordmark{font-family:var(--pix);font-size:17px;color:#0f2350;text-decoration:none;letter-spacing:.04em;white-space:nowrap}
+.lang-switch button{white-space:nowrap;flex:none}
+nav a{white-space:nowrap}
+.wordmark b{color:var(--blue)}
+nav{display:flex;align-items:center;gap:4px;margin-left:10px}
+nav a{font-family:var(--pix);font-size:14.5px;color:var(--navy);text-decoration:none;padding:4px 10px;border:1.5px solid transparent;transition:all .18s}
+nav a:hover{border-color:var(--line);background:#eaf4fc;box-shadow:2px 2px 0 rgba(23,43,99,.5)}
+nav a.gh{background:var(--navy);color:#fff;border-color:var(--navy)}
+nav a.gh:hover{background:var(--blue);color:#fff}
+.lang-switch{display:flex;align-items:center;gap:5px;margin-left:auto}
+.lang-switch button{border:1.5px solid var(--line);background:#eaf4fc;color:var(--navy);font-family:var(--pix);font-size:13px;padding:4px 10px;line-height:1.25;box-shadow:2px 2px 0 rgba(23,43,99,.5);transition:all .15s}
+.lang-switch button:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 rgba(23,43,99,.5)}
+.lang-switch button.active{background:var(--navy);color:#fff}
+
+/* ---------- reveal : restrained scroll-in ---------- */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--delay,0s)}
+.reveal[data-variant="left"]{transform:translateX(-24px)}
+.reveal[data-variant="right"]{transform:translateX(24px)}
+.reveal.in{opacity:1;transform:none}
+/* slide-only reveal for containers holding controls: never gated by opacity */
+.reveal-slide{transform:translateY(20px);transition:transform .8s var(--ease)}
+.reveal-slide.in{transform:none}
+/* cards keep full opacity before entry (links stay usable), only rise/settle */
+.scroll-card{transform:translateY(26px);transition:transform .8s var(--ease);transition-delay:var(--delay,0s)}
+.scroll-card.in{transform:var(--rest,none)}
+.scroll-card.in:hover{transform:var(--rest,none) translateY(-4px)}
+
+/* ---------- hero : overlapping windows ---------- */
+.hero{position:relative;padding:64px 0 30px;min-height:calc(100svh - 90px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(380px,.92fr);gap:0;align-items:start}
+.about-win{position:relative;z-index:3}
+.about-win .win-body{padding:30px 32px 30px}
+.hero-kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;color:var(--blue);margin:0 0 14px}
+.hero-kicker::before{content:"■ ";color:var(--orange)}
+.hero h1{font-family:var(--pix);font-weight:400;font-size:clamp(38px,5.2vw,56px);line-height:1.28;letter-spacing:.01em;margin:0 0 16px;color:var(--ink)}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero h1 .accent{color:var(--orange)}
+.hero-lede{font-size:15.5px;line-height:1.9;color:var(--body);max-width:520px;margin:0 0 24px}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:9px;min-height:47px;padding:0 20px;border-radius:999px;text-decoration:none;font-weight:800;font-size:14.5px;border:1px solid var(--line-strong);transition:transform .25s var(--ease),background .25s,border-color .25s,color .25s}
-.btn:hover{transform:translateY(-2px)}
-.btn.primary{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
-.btn.primary:hover{background:var(--amber-bright)}
-.btn.ghost{background:rgba(21,24,21,.6);color:var(--ink)}
-.btn.ghost:hover{border-color:var(--amber);color:var(--amber-bright)}
-.hero-stats{display:flex;gap:0;margin-top:42px;border-top:1px solid var(--line);max-width:560px}
-.stat{padding:17px 22px 0 0}
-.stat + .stat{border-left:1px solid var(--line);padding-left:22px}
-.stat strong{display:block;font-family:"Noto Serif SC",serif;font-size:28px;line-height:1;color:var(--ink)}
-.stat strong i{font-style:normal;color:var(--amber);font-size:18px}
-.stat span{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}
-
-.hero-stage{position:relative;perspective:1200px}
-.console-card{border:1px solid rgba(242,236,220,.13);background:rgba(21,24,21,.9);box-shadow:var(--shadow);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:24px;padding:20px;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .35s ease-out}
-.console-top{display:flex;align-items:center;gap:7px;margin-bottom:16px;color:var(--dim);font-family:"JetBrains Mono",monospace;font-size:11.5px}
-.dot{width:9px;height:9px;border-radius:50%;background:#555a52}
-.dot:nth-child(2){background:#8a8578}
-.dot:nth-child(3){background:#c6c1b1}
-.console-top span:last-child{margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sync-caption{display:flex;justify-content:space-between;gap:16px;margin-top:14px;color:var(--muted);font-size:12.5px}
-.sync-caption b{color:var(--amber-bright);font-weight:700;font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.08em}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 18px;text-decoration:none;font-family:var(--pix);font-size:15px;border:2px solid var(--line);background:#eaf4fc;color:var(--navy);box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 rgba(23,43,99,.85)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(23,43,99,.85)}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.primary:hover{background:var(--blue)}
+.hero-stats{display:flex;margin-top:28px;border:2px solid var(--line);background:#eef5fb}
+.stat{flex:1;padding:12px 16px 11px}
+.stat + .stat{border-left:2px solid var(--line)}
+.stat strong{display:block;font-family:var(--vt);font-weight:400;font-size:32px;line-height:1;color:var(--ink)}
+.stat strong i{font-style:normal;color:var(--orange);font-size:19px;font-family:var(--pix)}
+.stat span{display:block;margin-top:4px;color:var(--muted);font-size:12px}
+.scroll-cue{display:flex;align-items:center;gap:10px;margin-top:22px;color:var(--muted);font-family:var(--mono);font-size:10.5px;letter-spacing:.24em}
+.scroll-cue .chev{color:var(--orange);animation:cueBob 2.2s ease-in-out infinite;font-size:13px}
+@keyframes cueBob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.scroll-cue .line{width:56px;height:2px;background:repeating-linear-gradient(90deg,var(--dim) 0 5px,transparent 5px 10px)}
+.console-win{position:relative;z-index:2;margin-top:74px;margin-left:-46px;transform:rotate(.6deg)}
+.console-win .win-body{padding:18px 18px 14px;background:#f2f7fb}
+.sync-caption{display:flex;justify-content:space-between;gap:14px;margin-top:10px;color:var(--muted);font-size:12.5px}
+.sync-caption b{color:var(--blue);font-weight:700;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+.hero-note{position:absolute;right:6px;bottom:-38px;z-index:4;transform:rotate(-2deg)}
+.hero-note .win-bar{font-size:13.5px;padding-top:3px;padding-bottom:3px}
+.hero-note .win-body{padding:9px 14px;font-family:var(--mono);font-size:11.5px;color:var(--body);letter-spacing:.06em}
 
 /* ---------- sections ---------- */
-.section{padding:84px 0 8px;scroll-margin-top:84px;position:relative}
-/* faint patterned spine running down the left edge of each section */
-.section::before{content:"";position:absolute;left:-34px;top:96px;bottom:10px;width:14px;opacity:.5;pointer-events:none;
-  background-image:radial-gradient(circle,rgba(242,236,220,.16) 1.2px,transparent 1.8px);background-size:14px 22px;
-  -webkit-mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent)}
-@media(max-width:1180px){.section::before{display:none}}
-.sec-head{display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:end;margin-bottom:16px}
-.sec-index{font-family:"JetBrains Mono",monospace;color:var(--amber);font-size:12.5px;letter-spacing:.12em;padding-bottom:9px}
-.sec-head h2{font-family:"Noto Serif SC",serif;font-size:clamp(34px,5vw,54px);line-height:1.1;margin:0;letter-spacing:-.02em}
-.sec-head p{grid-column:2;color:var(--muted);font-size:15px;margin:8px 0 0;max-width:520px}
-.sec-rule{height:1px;background:var(--line);margin-bottom:28px}
+.section{padding:96px 0 8px;scroll-margin-top:96px;position:relative}
+.sec-head{display:flex;align-items:flex-end;gap:18px;margin-bottom:20px;flex-wrap:wrap}
+.sec-tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:#fff;background:var(--blue);border:2px solid var(--line);padding:4px 9px;box-shadow:3px 3px 0 rgba(23,43,99,.8)}
+.sec-head h2{font-family:var(--pix);font-weight:400;font-size:clamp(30px,4.4vw,44px);line-height:1.2;margin:0;color:var(--ink)}
+.sec-head p{width:100%;color:var(--muted);font-size:14.5px;margin:2px 0 0}
+.sec-rule{height:0;border-top:2px dashed rgba(36,64,126,.45);margin-bottom:30px}
 
-/* ---------- toolbar ---------- */
-.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:9px;border:1px solid var(--line);border-radius:16px;background:rgba(21,24,21,.78);backdrop-filter:blur(12px)}
-.filters{display:flex;gap:5px;flex-wrap:wrap}
-.fbtn{border:1px solid transparent;background:transparent;color:var(--muted);padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:700;transition:all .25s}
-.fbtn:hover{color:var(--ink);background:rgba(242,236,220,.055)}
-.fbtn.active{background:var(--ink);color:#171711}
-.result-count{font-family:"JetBrains Mono",monospace;color:var(--dim);font-size:11.5px}
-.search{margin-left:auto;display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:rgba(10,12,11,.55);border-radius:999px;padding:8px 13px;min-width:220px}
-.search:focus-within{border-color:rgba(224,154,79,.7)}
-.search svg{flex:none;color:var(--dim)}
+/* ---------- toolbar window ---------- */
+.toolbar-win{margin-bottom:34px}
+.toolbar-in{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px}
+.filters{display:flex;gap:7px;flex-wrap:wrap}
+.fbtn{border:2px solid var(--line);background:#eaf4fc;color:var(--navy);padding:6px 14px;font-family:var(--pix);font-size:14.5px;box-shadow:2.5px 2.5px 0 rgba(23,43,99,.55);transition:all .15s}
+.fbtn:hover{transform:translate(-1px,-1px);box-shadow:3.5px 3.5px 0 rgba(23,43,99,.55)}
+.fbtn.active{background:var(--navy);color:#fff}
+.result-count{font-family:var(--mono);color:var(--muted);font-size:11.5px;letter-spacing:.08em}
+.search{margin-left:auto;display:flex;align-items:center;gap:9px;border:2px solid var(--line);background:#fff;padding:7px 12px;min-width:230px;box-shadow:inset 2px 2px 0 rgba(36,64,126,.14)}
+.search:focus-within{outline:2px solid var(--sky);outline-offset:1px}
+.search svg{flex:none;color:var(--muted)}
 .search input{background:none;border:none;outline:none;color:var(--ink);font-size:14px;width:100%;min-width:0}
 .search input::placeholder{color:var(--dim)}
 
-/* ---------- project cards ---------- */
-.spot{position:relative}
-.spot::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;opacity:0;transition:opacity .3s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.045),transparent 52%)}
-.spot:hover::before{opacity:1}
-.spot > *{position:relative;z-index:1}
-.featured-card{margin-top:22px;display:grid;grid-template-columns:minmax(0,.94fr) minmax(400px,1.06fr);min-height:440px;border:1px solid var(--line-strong);border-radius:26px;overflow:hidden;background:rgba(21,24,21,.94);cursor:pointer;transition:transform .35s var(--ease),border-color .35s,box-shadow .35s}
-.featured-card:hover{transform:translateY(-4px);border-color:rgba(224,154,79,.7);box-shadow:0 28px 70px rgba(0,0,0,.32)}
-.featured-copy{padding:clamp(26px,4vw,44px);display:flex;flex-direction:column;align-items:flex-start}
-.flag{display:inline-flex;align-items:center;gap:8px;background:var(--amber);color:var(--amber-ink);font-size:12px;font-weight:900;padding:6px 11px;border-radius:999px;margin-bottom:22px}
-.flag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--amber-ink)}
-.p-meta{display:flex;flex-wrap:wrap;gap:8px 15px;font-size:12.5px;color:var(--muted);align-items:center;font-family:"JetBrains Mono",monospace}
-.p-meta .repo{color:var(--muted)}
-.lang-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px;box-shadow:0 0 0 4px rgba(242,236,220,.04)}
-.featured-copy h3,.proj-title{font-family:"Noto Serif SC",serif;font-weight:900;letter-spacing:-.02em}
-.featured-copy h3{font-size:clamp(29px,3.8vw,42px);line-height:1.2;margin:14px 0 12px}
+/* ---------- project windows ---------- */
+.flag{display:inline-flex;align-items:center;gap:7px;background:var(--orange);color:#fff;border:2px solid #8a4305;font-family:var(--pix);font-size:13px;padding:3px 10px;margin-bottom:16px;box-shadow:2.5px 2.5px 0 rgba(23,43,99,.6)}
+.p-meta{display:flex;flex-wrap:wrap;gap:7px 14px;font-size:12px;color:var(--muted);align-items:center;font-family:var(--mono)}
+.lang-dot{width:9px;height:9px;display:inline-block;margin-right:6px;border:1.5px solid var(--line);vertical-align:-1px}
+.featured-card{cursor:pointer;transition:transform .25s var(--ease)}
+.featured-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(380px,1.05fr)}
+.featured-copy{padding:26px 28px 28px;display:flex;flex-direction:column;align-items:flex-start}
+.featured-copy h3,.proj-title{font-family:var(--pix);font-weight:400;letter-spacing:.01em;color:var(--ink)}
+.featured-copy h3{font-size:clamp(26px,3.4vw,36px);line-height:1.3;margin:13px 0 10px}
 .featured-desc,.proj-desc{color:var(--body);margin:0}
-.featured-desc{font-size:16px;line-height:1.8;max-width:520px}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px}
-.chip{font-size:12.5px;color:var(--body);border:1px solid var(--line);background:rgba(242,236,220,.035);padding:5px 10px;border-radius:999px}
-.p-links{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto;padding-top:26px;align-items:center}
-.p-link{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:800;text-decoration:none;border:1px solid var(--line-strong);padding:8px 13px;border-radius:999px;background:rgba(10,12,11,.28);transition:all .25s}
-.p-link:hover{border-color:var(--amber);color:var(--amber-bright);transform:translateY(-2px)}
-.p-link.primary{background:var(--ink);color:#171711;border-color:var(--ink)}
-.p-link.primary:hover{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
-.open-hint{margin-left:auto;width:40px;height:40px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;color:var(--amber-bright);font-size:18px;transition:all .3s var(--ease)}
-.featured-card:hover .open-hint,.proj-card:hover .open-hint{background:var(--amber);color:var(--amber-ink);transform:rotate(45deg)}
-.featured-visual{min-height:440px;background:#10140f}
-.project-visual{position:relative;width:100%;height:100%;min-height:220px;overflow:hidden;background:#11150f}
-.project-visual::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cpath d='M44 .5H0M.5 0v44' fill='none' stroke='%23f2ecdc' stroke-opacity='.045'/%3E%3C/svg%3E")}
-.visual-label{position:absolute;left:17px;top:15px;z-index:5;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:rgba(242,236,220,.5)}
-.visual-switch{display:grid;place-items:center;padding:50px 28px 28px}
-.sync-svg{width:min(540px,100%);height:auto;overflow:visible}
-.sync-path{fill:none;stroke:rgba(198,193,177,.38);stroke-width:2;stroke-dasharray:7 9;animation:dashMove 1.4s linear infinite}
-@keyframes dashMove{to{stroke-dashoffset:-16}}
-.sync-ring{fill:none;stroke:rgba(242,236,220,.16);stroke-width:1;stroke-dasharray:3 8;transform-origin:center;animation:ringSpin 16s linear infinite}
-@keyframes ringSpin{to{transform:rotate(360deg)}}
-.proj-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px;margin-top:20px}
-.proj-card{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:rgba(21,24,21,.94);cursor:pointer;transition:transform .35s var(--ease),border-color .35s,box-shadow .35s;display:flex;flex-direction:column}
-.proj-card:hover{transform:translateY(-5px);border-color:rgba(224,154,79,.58);box-shadow:0 24px 55px rgba(0,0,0,.3)}
+.featured-desc{font-size:15px;line-height:1.85;max-width:500px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.chip{font-size:12px;color:var(--navy);border:1.5px solid var(--line);background:#eef5fb;padding:3px 9px;font-family:var(--mono)}
+.p-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:24px;align-items:center}
+.p-link{display:inline-flex;align-items:center;gap:7px;font-family:var(--pix);font-size:14px;text-decoration:none;border:2px solid var(--line);padding:6px 13px;background:#eaf4fc;color:var(--navy);box-shadow:2.5px 2.5px 0 rgba(23,43,99,.55);transition:all .15s}
+.p-link:hover{transform:translate(-1px,-1px);box-shadow:3.5px 3.5px 0 rgba(23,43,99,.55)}
+.p-link.primary{background:var(--navy);color:#fff}
+.p-link.primary:hover{background:var(--blue)}
+.open-hint{margin-left:auto;font-family:var(--mono);color:var(--blue);font-size:12px;letter-spacing:.08em}
+.featured-visual{border-left:2px solid var(--line);min-height:380px}
+.proj-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:30px 26px;margin-top:34px;align-items:start}
+.proj-card{cursor:pointer;transition:transform .25s var(--ease)}
 .layout-cc-quota-monitor{grid-column:span 7}
-.layout-perler-bead-pattern{grid-column:span 5}
-.layout-grade-ocr-entry{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr)}
-.layout-grade-ocr-entry .project-visual{order:2;min-height:100%}
-.proj-content{padding:25px 26px 26px;display:flex;flex-direction:column;align-items:flex-start;flex:1;width:100%}
-.proj-top{display:flex;align-items:center;gap:13px;width:100%;flex-wrap:wrap}
-.proj-num{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--amber);letter-spacing:.1em}
-.proj-title{font-size:clamp(22px,2.8vw,28px);line-height:1.3;margin:13px 0 8px;transition:color .25s}
-.proj-card:hover .proj-title{color:var(--amber-bright)}
-.proj-desc{font-size:14.5px;line-height:1.75}
-.visual-quota{padding:52px 26px 26px;background:#141711}
-.quota-window{max-width:500px;margin:0 auto}
-.quota-row{display:grid;grid-template-columns:54px 1fr 38px;gap:12px;align-items:center;margin-top:16px;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted)}
-.quota-track{height:11px;background:#272b25;border-radius:99px;overflow:hidden}
-.quota-fill{height:100%;width:var(--w);border-radius:99px;background:var(--c);transform-origin:left;animation:quotaGrow 3.6s ease-in-out infinite alternate}
+.layout-perler-bead-pattern{grid-column:span 5;margin-top:44px}
+.layout-grade-ocr-entry{grid-column:2/12;margin-top:6px}
+.layout-grade-ocr-entry .proj-split{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(330px,.98fr)}
+.layout-grade-ocr-entry .project-visual{border-left:2px solid var(--line);border-top:none;min-height:100%}
+.proj-content{padding:22px 24px 24px;display:flex;flex-direction:column;align-items:flex-start}
+.proj-top{display:flex;align-items:center;gap:12px;width:100%;flex-wrap:wrap}
+.proj-num{font-family:var(--vt);font-size:19px;color:var(--blue);letter-spacing:.06em}
+.proj-title{font-size:clamp(21px,2.6vw,27px);line-height:1.35;margin:12px 0 7px}
+.proj-desc{font-size:14px;line-height:1.8}
+.project-visual{position:relative;width:100%;min-height:210px;overflow:hidden;background:#eef5fb;border-top:2px solid var(--line)}
+.visual-label{position:absolute;left:14px;top:11px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:rgba(22,38,94,.55)}
+.visual-switch{display:grid;place-items:center;padding:46px 24px 22px}
+.sync-svg{width:min(520px,100%);height:auto;overflow:visible}
+.sync-path{fill:none;stroke:rgba(43,74,203,.45);stroke-width:2;stroke-dasharray:7 9;animation:dashMove 1.6s linear infinite}
+@keyframes dashMove{to{stroke-dashoffset:-16}}
+.sync-ring{fill:none;stroke:rgba(43,74,203,.25);stroke-width:1;stroke-dasharray:3 8;transform-origin:center;animation:ringSpin 18s linear infinite}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+.visual-quota{padding:48px 24px 24px}
+.quota-window{max-width:480px;margin:0 auto;border:2px solid var(--line);background:#fff;padding:16px 18px 13px;box-shadow:var(--shadow-sm)}
+.quota-row{display:grid;grid-template-columns:54px 1fr 40px;gap:11px;align-items:center;margin-top:13px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.quota-row:first-child{margin-top:2px}
+.quota-track{height:11px;background:#dbe7f3;border:1.5px solid var(--line);overflow:hidden}
+.quota-fill{height:100%;width:var(--w);background:var(--c);transform-origin:left;animation:quotaGrow 3.8s ease-in-out infinite alternate}
 @keyframes quotaGrow{from{transform:scaleX(.68)}to{transform:scaleX(1)}}
-.quota-window small{display:block;margin-top:18px;color:var(--dim);font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.09em}
-.visual-beads{display:grid;place-items:center;padding:52px 22px 26px;background:#161310}
-.bead-art{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;width:min(320px,88%);filter:saturate(.45) brightness(.94)}
-.bead-art i{aspect-ratio:1;border-radius:50%;background:var(--c);box-shadow:inset -3px -4px 6px rgba(0,0,0,.28);animation:beadWave 3s ease-in-out infinite;animation-delay:var(--d)}
-@keyframes beadWave{0%,100%{transform:scale(.84);opacity:.65}50%{transform:scale(1.07);opacity:1}}
-.visual-ocr{display:grid;place-items:center;padding:52px 26px 28px;background:#121612}
-.ocr-sheet{width:min(420px,92%);background:#21241f;border:1px solid #383d36;border-radius:8px;padding:24px;transform:rotate(-1.4deg);position:relative;box-shadow:0 22px 42px rgba(0,0,0,.26);overflow:hidden}
-.ocr-sheet::before,.ocr-sheet::after{content:"";position:absolute;width:22px;height:22px;border-color:var(--amber);border-style:solid}
-.ocr-sheet::before{left:8px;top:8px;border-width:2px 0 0 2px}
-.ocr-sheet::after{right:8px;bottom:8px;border-width:0 2px 2px 0}
+.quota-window small{display:block;margin-top:14px;color:var(--dim);font-family:var(--mono);font-size:10px;letter-spacing:.09em}
+.visual-beads{display:grid;place-items:center;padding:48px 20px 24px}
+.bead-art{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;width:min(310px,88%)}
+.bead-art i{aspect-ratio:1;border-radius:50%;background:var(--c);border:1.5px solid rgba(23,43,99,.35);animation:beadWave 3.2s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes beadWave{0%,100%{transform:scale(.85);opacity:.7}50%{transform:scale(1.06);opacity:1}}
+.visual-ocr{display:grid;place-items:center;padding:48px 24px 26px}
+.ocr-sheet{width:min(400px,92%);background:#fff;border:2px solid var(--line);padding:22px;transform:rotate(-1.3deg);position:relative;box-shadow:var(--shadow-sm);overflow:hidden}
+.ocr-sheet::before,.ocr-sheet::after{content:"";position:absolute;width:20px;height:20px;border-color:var(--orange);border-style:solid}
+.ocr-sheet::before{left:7px;top:7px;border-width:2.5px 0 0 2.5px}
+.ocr-sheet::after{right:7px;bottom:7px;border-width:0 2.5px 2.5px 0}
 .ocr-lines{position:relative;display:grid;gap:10px;overflow:hidden}
-.ocr-lines i{display:block;height:8px;border-radius:99px;background:#434842}
+.ocr-lines i{display:block;height:8px;background:#b9cfe8}
 .ocr-lines i:nth-child(1){width:62%}.ocr-lines i:nth-child(2){width:88%}.ocr-lines i:nth-child(3){width:74%}.ocr-lines i:nth-child(4){width:52%}
-.scan-beam{position:absolute;left:-6px;right:-6px;height:2px;background:var(--amber);box-shadow:0 0 13px var(--amber);animation:scanMove 2.6s ease-in-out infinite}
+.scan-beam{position:absolute;left:-6px;right:-6px;height:2px;background:var(--orange);animation:scanMove 2.8s ease-in-out infinite}
 @keyframes scanMove{0%,100%{top:0}50%{top:calc(100% - 2px)}}
-.ocr-result{display:flex;gap:7px;margin-top:18px;flex-wrap:wrap}
-.ocr-result span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--body);border:1px solid rgba(242,236,220,.22);padding:4px 8px;border-radius:999px}
-/* scroll-card transitions must win over the cards' own hover transitions */
-.proj-card.scroll-card,.featured-card.scroll-card{transition:transform .85s var(--ease),filter .85s var(--ease),border-color .35s,box-shadow .35s;transition-delay:var(--delay,0s),var(--delay,0s),0s,0s}
-.proj-card.scroll-card.in:hover{transform:translateY(-5px)}
-.featured-card.scroll-card.in:hover{transform:translateY(-4px)}
-.empty{display:none;padding:48px 20px;text-align:center;color:var(--muted);font-size:15px;border:1px dashed var(--line-strong);border-radius:20px;margin-top:22px;background:rgba(21,24,21,.6)}
-.empty strong{display:block;color:var(--ink);font-family:"Noto Serif SC",serif;font-size:22px;margin-bottom:5px}
+.ocr-result{display:flex;gap:7px;margin-top:16px;flex-wrap:wrap}
+.ocr-result span{font-family:var(--mono);font-size:10.5px;color:var(--navy);border:1.5px solid var(--line);background:#eef5fb;padding:3px 8px}
+.empty{display:none;padding:44px 20px;text-align:center;color:var(--muted);font-size:14.5px;margin-top:30px}
+.empty strong{display:block;color:var(--ink);font-family:var(--pix);font-weight:400;font-size:22px;margin-bottom:5px}
 .empty.show{display:block}
 
-/* ---------- principles ---------- */
-.principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.principle{border:1px solid var(--line);border-radius:22px;padding:26px;background:rgba(21,24,21,.84);position:relative;overflow:hidden;transition:transform .3s var(--ease),border-color .3s}
-.principle:hover{transform:translateY(-4px);border-color:rgba(224,154,79,.38)}
-.principle::after{content:attr(data-num);position:absolute;right:10px;bottom:-24px;font-family:"Noto Serif SC",serif;font-weight:900;font-size:96px;color:rgba(242,236,220,.045);line-height:1}
-.principle small{font-family:"JetBrains Mono",monospace;color:var(--amber);font-size:11px;letter-spacing:.15em}
-.principle h3{font-family:"Noto Serif SC",serif;font-size:23px;margin:14px 0 8px}
-.principle p{color:var(--body);font-size:14.5px;line-height:1.75;margin:0;max-width:300px}
-.stack-strip{margin-top:16px;border:1px solid var(--line);border-radius:22px;background:rgba(13,16,13,.72);padding:20px 22px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.stack-strip h3{font-size:13px;color:var(--muted);font-weight:500;margin:0;letter-spacing:.06em;white-space:nowrap}
-.stack-list{display:flex;flex-wrap:wrap;gap:8px}
-.stack-list span{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--body);border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:rgba(242,236,220,.03)}
+/* ---------- principles : three small windows, slightly askew ---------- */
+.principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;align-items:start}
+.principle{transition:transform .25s var(--ease)}
+.principle .win-body{padding:20px 22px 22px;position:relative}
+.principle small{font-family:var(--mono);color:var(--blue);font-size:10.5px;letter-spacing:.15em}
+.principle h3{font-family:var(--pix);font-weight:400;font-size:22px;margin:10px 0 7px;color:var(--ink)}
+.principle p{color:var(--body);font-size:14px;line-height:1.8;margin:0}
+.principle .big-num{position:absolute;right:12px;bottom:2px;font-family:var(--vt);font-size:52px;color:rgba(43,74,203,.12);line-height:1}
+.principle:nth-child(1){transform:rotate(-.7deg)}
+.principle:nth-child(2){transform:rotate(.5deg);margin-top:22px}
+.principle:nth-child(3){transform:rotate(-.4deg);margin-top:8px}
+.stack-win{margin-top:34px}
+.stack-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:15px 18px}
+.stack-in h3{font-family:var(--pix);font-weight:400;font-size:15.5px;color:var(--navy);margin:0;white-space:nowrap}
+.stack-list{display:flex;flex-wrap:wrap;gap:7px}
+.stack-list span{font-family:var(--mono);font-size:12px;color:var(--navy);border:1.5px solid var(--line);padding:3px 9px;background:#eef5fb}
 
-footer{border-top:1px solid var(--line);margin-top:88px;padding:26px 0 40px;position:relative;z-index:2}
-.footer-in{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--dim)}
-.footer-in a{color:var(--muted);text-decoration:none}
-.footer-in a:hover{color:var(--amber-bright)}
-.to-top{display:inline-flex;align-items:center;gap:8px}
-.to-top b{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--line-strong);border-radius:50%;color:var(--amber);font-weight:500}
+footer{margin-top:96px;padding-bottom:42px;position:relative;z-index:2}
+.footer-in{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:13px 16px;font-size:13px;color:var(--muted);font-family:var(--mono)}
+.footer-in a{color:var(--blue);text-decoration:none}
+.footer-in a:hover{text-decoration:underline}
+.to-top{display:inline-flex;align-items:center;gap:7px}
+.to-top b{width:26px;height:26px;display:grid;place-items:center;border:1.5px solid var(--line);background:#eaf4fc;color:var(--navy);font-weight:400;box-shadow:2px 2px 0 rgba(23,43,99,.5)}
 
-/* ---------- reader ---------- */
-.reader{position:fixed;inset:0;z-index:120;background:rgba(5,6,5,.72);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;backdrop-filter:blur(7px)}
+/* ---------- reader : one big window ---------- */
+.reader{position:fixed;inset:0;z-index:120;background:rgba(18,32,74,.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .reader.open{opacity:1;visibility:visible}
-.reader-panel{background:#101310;width:min(860px,100%);max-height:94dvh;border-radius:26px 26px 0 0;border:1px solid var(--line-strong);border-bottom:none;display:flex;flex-direction:column;overflow:hidden;transform:translateY(40px);transition:transform .38s var(--ease);box-shadow:0 -28px 80px rgba(0,0,0,.45)}
+.reader-panel{width:min(880px,100%);max-height:94dvh;display:flex;flex-direction:column;transform:translateY(36px);transition:transform .38s var(--ease)}
 .reader.open .reader-panel{transform:none}
-.reader-bar{position:relative;display:flex;align-items:center;gap:12px;padding:14px 19px;border-bottom:1px solid var(--line);flex-shrink:0;background:rgba(21,24,21,.92)}
-.reader-bar .repo{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.reader-bar .drag{width:42px;height:4px;border-radius:99px;background:var(--line-strong);position:absolute;left:50%;transform:translateX(-50%);top:6px}
-.close-btn{margin-left:auto;width:37px;height:37px;border-radius:50%;border:1px solid var(--line-strong);background:transparent;color:var(--ink);font-size:15px;display:grid;place-items:center;flex-shrink:0;transition:all .25s}
-.close-btn:hover{background:var(--amber);color:var(--amber-ink);border-color:var(--amber)}
-.reader-body{overflow-y:auto;padding:0 28px 50px;scrollbar-color:var(--line-strong) transparent}
-.reader-visual{height:200px;margin:0 -28px 26px;min-height:200px}
-.reader-body h1{font-family:"Noto Serif SC",serif;font-size:clamp(28px,5vw,40px);line-height:1.25;margin:12px 0 10px;letter-spacing:-.02em}
-.reader-body .lede{font-size:16px;color:var(--body);margin:0 0 16px;line-height:1.8}
-.reader-body p.para{font-size:15px;line-height:1.85;color:var(--body);margin:0 0 12px}
-.reader-body h5{font-size:11.5px;letter-spacing:.14em;color:var(--amber-bright);margin:26px 0 11px;font-weight:800;font-family:"JetBrains Mono",monospace}
-.reader-points{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.reader-points li{font-size:13.5px;line-height:1.7;color:var(--body);padding:14px 15px;border:1px solid var(--line);border-radius:14px;background:rgba(242,236,220,.025)}
-.reader-points li b{color:var(--ink);display:block;margin-bottom:3px}
+.reader-panel .win-bar{font-size:16px}
+.reader-body{overflow-y:auto;padding:0 28px 46px;background:var(--win);scrollbar-color:var(--sky) transparent}
+.reader-visual{height:200px;margin:0 -28px 24px;min-height:200px;border-top:none;border-bottom:2px solid var(--line)}
+.reader-body h1{font-family:var(--pix);font-weight:400;font-size:clamp(27px,4.6vw,38px);line-height:1.3;margin:12px 0 10px;color:var(--ink)}
+.reader-body .lede{font-size:15.5px;color:var(--body);margin:0 0 14px;line-height:1.85}
+.reader-body p.para{font-size:14.5px;line-height:1.85;color:var(--body);margin:0 0 10px}
+.reader-body h5{font-size:11px;letter-spacing:.14em;color:var(--blue);margin:24px 0 10px;font-weight:700;font-family:var(--mono)}
+.reader-points{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.reader-points li{font-size:13.5px;line-height:1.7;color:var(--body);padding:13px 15px;border:1.5px solid var(--line);background:#eef5fb}
+.reader-points li b{color:var(--ink);display:block;margin-bottom:3px;font-family:var(--pix);font-weight:400;font-size:15px}
 .reader-tech{display:flex;flex-wrap:wrap;gap:7px}
-.reader-body .p-links{margin-top:28px}
+.reader-body .p-links{margin-top:26px}
+.close-btn{margin-left:auto;width:26px;height:22px;border:1.5px solid var(--line);background:var(--red);color:#fff;font-size:11px;display:grid;place-items:center;flex:none;font-family:var(--mono);box-shadow:1.5px 1.5px 0 rgba(23,43,99,.55)}
+.close-btn:hover{background:#c93320}
 
-/* ---------- liquid glass modules (professional dark recipe) ----------
-   Why the previous version looked white/frosted: stacked white gradient
-   tints only add luminance (real glass attenuates it), and plain blur
-   averages pixels without moving any — it fogs, it never refracts.
-   This stack instead: (1) near-transparent tint rgba(255,255,255,.045);
-   (2) low blur at natural saturation declared on its own;
-   (3) a canvas-generated squircle displacement lens applied ONLY under
-   html.chromium (set by JS) — Safari/Firefox drop a backdrop url()
-   declaration wholesale, so it must never share one with the blur
-   fallback; (4) injected .lg-rim neutral edge ring + .lg-sheen specular
-   spans (DOM spans, because ::before/::after already carry the spotlight
-   and the principle numerals). Saturation stays at natural level: a high
-   saturate() was what turned the dark page colourful. */
-.console-card,.toolbar,.featured-card,.proj-card,.principle,.stack-strip,.empty{
-  background:var(--glass-tint);
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
-  border-color:rgba(255,255,255,.18);
-  box-shadow:var(--glass-rim);
-  isolation:isolate;
-}
-/* edge lensing, Chromium only: bends the backdrop at the rim, centre clear */
-html.chromium .console-card,html.chromium .toolbar,html.chromium .featured-card,html.chromium .proj-card{
-  backdrop-filter:url(#lgLens) blur(6px) saturate(102%) brightness(1.02);
-}
-.console-card{position:relative;overflow:hidden}
-.toolbar{position:relative;overflow:hidden}
-.stack-strip{position:relative;overflow:hidden}
-/* neutral edge rim: a single hairline of white light, brightest at the
-   top where a real pane catches light. No spectrum, no colour cast. */
-.lg-rim{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;padding:1px;
-  background:linear-gradient(165deg,rgba(255,255,255,.34),rgba(255,255,255,.07) 34%,rgba(255,255,255,.015) 64%,rgba(255,255,255,.12));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
-  opacity:.6}
-/* specular sheen: one soft pass of light across the top, kept faint */
-.lg-sheen{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;opacity:.5;
-  background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.035) 28%,transparent 48%),radial-gradient(120% 60% at 50% 118%,rgba(255,255,255,.05),transparent 55%)}
-.console-card > *,.toolbar > *,.stack-strip > *,.featured-card > *,.proj-card > *,.principle > *{position:relative;z-index:1}
-.console-card > .lg-rim,.console-card > .lg-sheen,.toolbar > .lg-rim,.toolbar > .lg-sheen,.stack-strip > .lg-rim,.stack-strip > .lg-sheen,.featured-card > .lg-rim,.featured-card > .lg-sheen,.proj-card > .lg-rim,.proj-card > .lg-sheen,.principle > .lg-rim,.principle > .lg-sheen{position:absolute;z-index:0}
-.featured-card:hover,.proj-card:hover{box-shadow:var(--glass-rim),0 30px 70px rgba(0,0,0,.34)}
-.principle:hover{box-shadow:var(--glass-rim)}
-/* the artwork panes inside the cards go translucent too, so the page
-   background shows through the whole module, not just its text side */
-.featured-visual{background:rgba(16,20,15,.30)}
-.project-visual{background:rgba(17,21,15,.28)}
-.visual-quota{background:rgba(20,23,17,.34)}
-.visual-beads{background:rgba(22,19,16,.34)}
-.visual-ocr{background:rgba(18,22,18,.34)}
-.quota-track{background:rgba(255,255,255,.10)}
-.ocr-sheet{background:rgba(33,36,31,.88)}
-/* small glass pieces: language switch, search, chips, links, ghost button */
-.lang-switch,.search,.chip,.p-link,.btn.ghost,.reader-points li{
-  background:rgba(255,255,255,.035);
-  backdrop-filter:blur(6px) saturate(102%) brightness(1.02);
-  -webkit-backdrop-filter:blur(6px) saturate(102%) brightness(1.02);
-  border-color:rgba(255,255,255,.13);
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.20),inset 0 -1px 1px rgba(255,255,255,.07);
-}
-.p-link.primary{background:var(--ink);box-shadow:none}
-/* reader sheet: glass rim and tint, kept denser so long text stays readable */
-.reader-panel{background:linear-gradient(135deg,rgba(255,255,255,.03),rgba(255,255,255,.008) 55%),rgba(15,18,15,.86);backdrop-filter:blur(8px) saturate(102%) brightness(1.02);-webkit-backdrop-filter:blur(8px) saturate(102%) brightness(1.02);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 1px rgba(255,255,255,.20),0 -28px 80px rgba(0,0,0,.45)}
-.reader-bar{background:rgba(255,255,255,.045)}
-/* no backdrop-filter support: fall back to a denser tint so text stays legible */
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .console-card,.toolbar,.featured-card,.proj-card,.principle,.stack-strip,.empty{background:rgba(17,20,17,.9)}
-  .lang-switch,.search,.chip,.p-link,.btn.ghost{background:rgba(17,20,17,.85)}
-}
-@media(prefers-reduced-transparency:reduce){
-  .console-card,.toolbar,.featured-card,.proj-card,.principle,.stack-strip,.empty{background:rgba(24,27,24,.94);backdrop-filter:none;-webkit-backdrop-filter:none}
-  .lg-rim,.lg-sheen{display:none}
-}
+/* artwork panes that sit directly under a title bar need no second rule */
+.featured-visual .project-visual,.reader-visual .project-visual,.proj-card .project-visual{border-top:none}
+.console-win .project-visual{border-top:none;background:transparent;min-height:0}
 
 @media(max-width:980px){
-  .hero{grid-template-columns:1fr;min-height:0;padding-top:56px;gap:30px}
-  .featured-card{grid-template-columns:1fr}
-  .featured-visual{min-height:340px;order:-1}
-  .layout-cc-quota-monitor,.layout-perler-bead-pattern{grid-column:1/-1}
-  .layout-grade-ocr-entry{grid-template-columns:1fr}
-  .layout-grade-ocr-entry .project-visual{order:0;min-height:250px}
-  .principles{grid-template-columns:1fr}
+  .hero{min-height:0;padding-top:44px}
+  .hero-grid{grid-template-columns:1fr;gap:26px}
+  .console-win{margin:0;transform:none}
+  .hero-note{position:static;transform:rotate(-1deg);margin-top:24px;width:max-content;max-width:100%}
+  .featured-grid{grid-template-columns:1fr}
+  .featured-visual{border-left:none;border-top:2px solid var(--line);min-height:320px;order:-1}
+  .layout-cc-quota-monitor,.layout-perler-bead-pattern,.layout-grade-ocr-entry{grid-column:1/-1;margin-top:0}
+  .layout-grade-ocr-entry .proj-split{grid-template-columns:1fr}
+  .layout-grade-ocr-entry .project-visual{border-left:none;border-top:2px solid var(--line);min-height:230px}
+  .principles{grid-template-columns:1fr;gap:22px}
+  .principle:nth-child(n){transform:none;margin-top:0}
 }
 @media(max-width:640px){
-  .wrap{width:min(100% - 32px,1120px)}
-  .header-in{gap:10px}
-  .wordmark{font-size:18px}
-  nav{margin-left:0;order:3;width:100%}
-  nav a{padding:7px 9px;font-size:13px}
+  .wrap{width:min(100% - 28px,1140px)}
+  :root{--shadow:5px 5px 0 rgba(23,43,99,.9)}
+  header{top:6px;margin-top:6px}
+  header .win-btns{display:none}
+  header nav{margin-left:0;order:4;width:100%;flex-wrap:wrap}
+  nav a{padding:4px 7px;font-size:13.5px}
   .lang-switch{margin-left:auto}
-  .hero{padding:44px 0 64px}
-  .hero h1{font-size:clamp(42px,13.5vw,62px)}
-  .hero-stats{flex-wrap:wrap;gap:6px 0}
-  .stat strong{font-size:24px}
-  .section{padding-top:68px}
-  .sec-head{grid-template-columns:1fr;gap:4px}
-  .sec-head p{grid-column:1}
-  .sec-index{padding:0}
-  .search{margin-left:0;width:100%}
+  .about-win .win-body{padding:24px 20px 24px}
+  .hero h1{font-size:clamp(33px,10.6vw,46px)}
+  .hero-stats{flex-direction:column}
+  .stat + .stat{border-left:none;border-top:2px solid var(--line)}
+  .console-win .win-body{padding:13px 12px 11px}
+  .section{padding-top:72px}
+  .search{margin-left:0;width:100%;min-width:0}
   .result-count{display:none}
-  .featured-visual{min-height:290px}
-  .featured-copy{padding:24px 20px 26px}
-  .proj-content{padding:22px 20px 24px}
-  .reader-body{padding:0 19px 42px}
-  .reader-visual{margin:0 -19px 22px;height:170px;min-height:170px}
+  .featured-copy{padding:22px 19px 24px}
+  .featured-visual{min-height:270px}
+  .proj-content{padding:19px 18px 21px}
+  .proj-grid{gap:24px}
+  .reader-body{padding:0 18px 40px}
+  .reader-visual{margin:0 -18px 20px;height:168px;min-height:168px}
   .reader-points{grid-template-columns:1fr}
   .footer-in{flex-direction:column;align-items:flex-start}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  .reveal,.scroll-card,.reveal-slide{opacity:1;transform:none;filter:none}
+  .reveal,.scroll-card,.reveal-slide{opacity:1;transform:none}
   .scroll-cue{display:none}
 }
 </style>
-<noscript><style>.reveal,.scroll-card,.reveal-slide{opacity:1;transform:none;filter:none}</style></noscript>
+<noscript><style>.reveal,.scroll-card,.reveal-slide{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
 
-<!-- liquid glass edge lens: a canvas-generated squircle displacement map
-     (built once by JS below) bends the backdrop at the rim and leaves the
-     centre clear. Applied only under html.chromium — Safari/Firefox cannot
-     render SVG filters inside backdrop-filter and keep the blur fallback.
-     The filter region is padded (-20% / 140%) so edge sampling never reads
-     transparent black, which would smear dark streaks at the rim. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-<filter id="lgLens" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-<feImage id="lgLensMap" result="lgMap" preserveAspectRatio="none"/>
-<feDisplacementMap in="SourceGraphic" in2="lgMap" scale="-300" xChannelSelector="R" yChannelSelector="G"/>
-</filter>
-</defs></svg>
-
+<!-- background: one continuous illustration running the full page height.
+     Abstract technology motifs only — orbit rings, wireframe polyhedra,
+     isometric block clusters, stepped platforms and a signal dish —
+     drawn for this page, spaced from the hero down to a night panorama
+     behind the footer. -->
 <div class="bg-scene" aria-hidden="true">
-  <div class="bg-glow a" id="glowA"></div><div class="bg-glow b" id="glowB"></div><div class="bg-glow c"></div><div class="bg-glow d"></div>
-  <div class="bg-grid" id="bgGrid"></div>
-  <div class="bg-dots" id="bgDots"></div>
-  <div class="bg-crosses" id="bgCrosses"></div>
-  <div class="bg-hatch"></div>
-  <div class="bg-orn one" id="ornOne"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor"><g class="spin"><circle cx="200" cy="200" r="188" stroke-dasharray="3 10"/><circle cx="200" cy="200" r="148" stroke-dasharray="42 14"/><path d="M200 4v28M200 368v28M4 200h28M368 200h28"/></g><g class="spin-rev"><circle cx="200" cy="200" r="104"/><circle cx="200" cy="200" r="62" stroke-dasharray="2 7"/><rect x="168" y="168" width="64" height="64"/></g><circle cx="200" cy="200" r="5" fill="currentColor" stroke="none"/></svg></div>
-  <div class="bg-orn two" id="ornTwo"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor"><g class="spin-rev"><circle cx="200" cy="200" r="186" stroke-dasharray="2 9"/><circle cx="200" cy="200" r="132"/><path d="M200 14v22M200 364v22M14 200h22M364 200h22"/></g><g class="spin"><circle cx="200" cy="200" r="78" stroke-dasharray="30 12"/><rect x="152" y="152" width="96" height="96" stroke-dasharray="4 6"/></g></svg></div>
-  <div class="bg-orn three"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor"><g class="spin"><circle cx="200" cy="200" r="184" stroke-dasharray="3 11"/><circle cx="200" cy="200" r="118" stroke-dasharray="48 16"/></g><path d="M186 200h28M200 186v28" stroke-width="2"/></svg></div>
-  <div class="bg-horizon"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-flow">
+    <!-- S1 : orbit ring + polyhedron, right — projects opening -->
+    <div class="scene scene-r scene-s1">
+      <svg viewBox="0 0 480 480" fill="none">
+        <g class="bg-spin" style="transform-origin:240px 205px">
+          <circle cx="240" cy="205" r="148" stroke="#7cc1f2" stroke-width="27" opacity=".48"/>
+          <circle cx="240" cy="205" r="190" stroke="#8fc0ea" stroke-width="1.5" stroke-dasharray="4 10" opacity=".8"/>
+        </g>
+        <circle cx="240" cy="205" r="10" fill="#2b4acb"/>
+        <circle cx="356" cy="94" r="6.5" fill="#e8442e"/>
+        <circle cx="96" cy="120" r="3" fill="#8fc0ea"/><circle cx="392" cy="330" r="3" fill="#8fc0ea"/><circle cx="70" cy="250" r="2.4" fill="#8fc0ea"/>
+        <g stroke="#5ea3e6" stroke-width="1.6" opacity=".6">
+          <path d="M100 336 l34 20 v40 l-34 20 l-34 -20 v-40 z"/>
+          <path d="M100 336 v40 m0 0 l34 -20 m-34 20 l-34 -20 m34 20 v40"/>
+        </g>
+        <rect x="330" y="392" width="9" height="9" fill="#ef7d1a" opacity=".85"/>
+      </svg>
+    </div>
+    <!-- S2 : isometric block cluster, left — mid projects -->
+    <div class="scene scene-l scene-s2 scene-drift">
+      <svg viewBox="0 0 480 360" fill="none">
+        <g stroke="#24407e" stroke-width="1.4">
+          <path d="M36 356 v-118 l50 -29 v147 z" fill="#a9d2f4"/>
+          <path d="M86 356 V209 l50 29 v118 z" fill="#79c0f2"/>
+          <path d="M36 238 l50 -29 50 29 -50 29 z" fill="#dceefb"/>
+          <path d="M158 356 v-76 l40 -23 v99 z" fill="#8fc3ee"/>
+          <path d="M198 356 v-99 l40 23 v76 z" fill="#5ea3e6"/>
+          <path d="M158 280 l40 -23 40 23 -40 23 z" fill="#c2def8"/>
+          <path d="M262 356 v-168 l56 -32 v200 z" fill="#79c0f2"/>
+          <path d="M318 356 V156 l56 32 v168 z" fill="#2b4acb" opacity=".78"/>
+          <path d="M262 188 l56 -32 56 32 -56 32 z" fill="#a9d2f4"/>
+        </g>
+        <path d="M318 156 V96" stroke="#24407e" stroke-width="2.4"/>
+        <circle cx="318" cy="88" r="6" fill="#e8442e"/>
+        <rect x="52" y="262" width="14" height="14" fill="#24407e"/>
+        <rect x="52" y="292" width="14" height="14" fill="#24407e" opacity=".55"/>
+        <rect x="282" y="216" width="13" height="13" fill="#dceefb"/>
+        <rect x="282" y="244" width="13" height="13" fill="#dceefb" opacity=".6"/>
+        <rect x="176" y="300" width="11" height="11" fill="#24407e"/>
+        <path d="M6 356 h468" stroke="#24407e" stroke-width="2"/>
+      </svg>
+    </div>
+    <!-- S3 : stepped terraces + mast, right — late projects -->
+    <div class="scene scene-r scene-s3">
+      <svg viewBox="0 0 480 340" fill="none">
+        <path d="M60 340 v-40 h360 v40 z" fill="#8fc3ee"/>
+        <path d="M104 300 v-36 h272 v36 z" fill="#a9d2f4"/>
+        <path d="M150 264 v-32 h180 v32 z" fill="#c2def8"/>
+        <path d="M192 232 v-28 h96 v28 z" fill="#dceefb"/>
+        <rect x="234" y="150" width="13" height="54" fill="#5ea3e6"/>
+        <circle cx="240" cy="136" r="15" fill="#2b4acb"/>
+        <circle cx="240" cy="136" r="25" stroke="#79c0f2" stroke-width="2" stroke-dasharray="4 6"/>
+        <g fill="#24407e"><rect x="84" y="312" width="11" height="11"/><rect x="368" y="312" width="11" height="11" opacity=".6"/><rect x="128" y="274" width="10" height="10" opacity=".7"/></g>
+        <rect x="404" y="206" width="8" height="8" fill="#ef7d1a" opacity=".85"/>
+        <path d="M20 340 h440" stroke="#24407e" stroke-width="2"/>
+      </svg>
+    </div>
+    <!-- S4 : concentric rings + cross target, left — principles -->
+    <div class="scene scene-l scene-s4 scene-drift-2">
+      <svg viewBox="0 0 480 380" fill="none">
+        <g class="bg-spin-rev" style="transform-origin:205px 195px">
+          <circle cx="205" cy="195" r="118" stroke="#a8d8f8" stroke-width="16" opacity=".55"/>
+          <circle cx="205" cy="195" r="156" stroke="#8fc0ea" stroke-width="1.5" stroke-dasharray="4 10" opacity=".85"/>
+          <circle cx="205" cy="195" r="72" stroke="#79c0f2" stroke-width="1.5" stroke-dasharray="3 8" opacity=".8"/>
+        </g>
+        <circle cx="205" cy="195" r="7" fill="#2b4acb"/>
+        <g stroke="#2b4acb" stroke-width="1.6" opacity=".5">
+          <path d="M336 42 h96 M384 0 v96"/>
+          <circle cx="384" cy="48" r="60" stroke-dasharray="4 9"/>
+        </g>
+        <circle cx="384" cy="48" r="5" fill="#ef7d1a"/>
+        <rect x="96" y="330" width="8" height="8" fill="#2b4acb" opacity=".55"/>
+        <circle cx="330" cy="318" r="3" fill="#8fc0ea"/>
+      </svg>
+    </div>
+    <!-- S5 : wireframe polyhedra pair, right — stack / footer approach -->
+    <div class="scene scene-r scene-s5">
+      <svg viewBox="0 0 480 360" fill="none" stroke="#5ea3e6">
+        <g opacity=".6" stroke-width="1.7">
+          <path d="M150 60 l72 42 v84 l-72 42 l-72 -42 v-84 z"/>
+          <path d="M150 60 v84 m0 0 l72 -42 m-72 42 l-72 -42 m72 42 v84"/>
+        </g>
+        <g opacity=".5" stroke-width="1.5">
+          <path d="M336 196 l46 27 v54 l-46 27 l-46 -27 v-54 z"/>
+          <path d="M336 196 v54 m0 0 l46 -27 m-46 27 l-46 -27 m46 27 v54"/>
+        </g>
+        <path d="M222 150 L296 218" stroke="#8fc0ea" stroke-width="1.5" stroke-dasharray="4 7"/>
+        <g fill="#2b4acb" stroke="none" opacity=".55"><rect x="238" y="300" width="7" height="7"/><rect x="66" y="272" width="7" height="7"/></g>
+        <rect x="392" y="90" width="10" height="10" fill="#ef7d1a" stroke="none" opacity=".85"/>
+        <circle cx="120" cy="316" r="3" fill="#8fc0ea" stroke="none"/>
+      </svg>
+    </div>
+  </div>
+  <div class="bg-layer bg-far" id="bgFar">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMin slice" fill="none">
+      <circle cx="1210" cy="130" r="330" fill="#dcebf8"/>
+      <circle cx="1210" cy="130" r="330" stroke="#bcd6f0" stroke-width="1.5" stroke-dasharray="3 9"/>
+      <g fill="#8fc0ea">
+        <circle cx="120" cy="90" r="3"/><circle cx="330" cy="160" r="2.4"/><circle cx="560" cy="70" r="3"/>
+        <circle cx="760" cy="180" r="2.2"/><circle cx="980" cy="90" r="2.6"/><circle cx="180" cy="300" r="2.2"/>
+        <circle cx="430" cy="330" r="3"/><circle cx="660" cy="290" r="2"/><circle cx="90" cy="520" r="2.6"/>
+        <circle cx="300" cy="560" r="2"/><circle cx="1120" cy="330" r="2.4"/><circle cx="1330" cy="430" r="3"/>
+        <circle cx="1240" cy="560" r="2"/><circle cx="860" cy="430" r="2.2"/><circle cx="520" cy="500" r="2.4"/>
+      </g>
+      <g class="bg-spin" style="transform-origin:1150px 300px">
+        <circle cx="1150" cy="300" r="118" stroke="#7cc1f2" stroke-width="17" opacity=".5"/>
+      </g>
+      <g class="bg-spin-rev" style="transform-origin:225px 640px">
+        <circle cx="225" cy="640" r="86" stroke="#a8d8f8" stroke-width="13" opacity=".55"/>
+        <circle cx="225" cy="640" r="122" stroke="#8fc0ea" stroke-width="1.5" stroke-dasharray="4 10"/>
+      </g>
+      <path d="M-40 760 L560 300 L900 470 L1490 60" stroke="#79c0f2" stroke-width="2.5" opacity=".5"/>
+      <path d="M-40 800 L560 340" stroke="#a8d8f8" stroke-width="1.5" stroke-dasharray="5 8" opacity=".7"/>
+    </svg>
+  </div>
+  <div class="bg-layer bg-mid" id="bgMid">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none" stroke="#5ea3e6">
+      <g opacity=".55" stroke-width="1.6">
+        <path d="M1180 120 l70 42 v84 l-70 42 l-70 -42 v-84 z"/>
+        <path d="M1180 120 v84 m0 0 l70 -42 m-70 42 l-70 -42 m70 42 v84"/>
+        <path d="M1268 330 l44 26 v52 l-44 26 l-44 -26 v-52 z"/>
+        <path d="M1268 330 v52 m0 0 l44 -26 m-44 26 l-44 -26 m44 26 v52"/>
+      </g>
+      <g opacity=".45" stroke-width="1.4">
+        <path d="M150 420 l52 30 v60 l-52 30 l-52 -30 v-60 z"/>
+        <path d="M150 420 v60 m0 0 l52 -30 m-52 30 l-52 -30 m52 30 v60"/>
+      </g>
+      <g class="bg-drift" stroke="#2b4acb" stroke-width="1.6" opacity=".5">
+        <path d="M1060 560 h120 M1120 500 v120 M1090 530 l60 60 M1150 530 l-60 60"/>
+        <circle cx="1120" cy="560" r="86" stroke-dasharray="4 9"/>
+      </g>
+      <g fill="#2b4acb" opacity=".55">
+        <rect x="392" y="196" width="7" height="7"/><rect x="1052" y="452" width="7" height="7"/><rect x="238" y="706" width="7" height="7"/>
+      </g>
+      <rect x="1050" y="450" width="11" height="11" fill="#ef7d1a" opacity=".85"/>
+    </svg>
+  </div>
+  <div class="bg-layer bg-near" id="bgNear">
+    <svg viewBox="0 0 1440 470" preserveAspectRatio="xMidYMax slice" fill="none">
+      <!-- stepped platforms, centre -->
+      <g>
+        <path d="M520 470 v-52 h400 v52 z" fill="#8fc3ee"/>
+        <path d="M566 418 v-44 h308 v44 z" fill="#a9d2f4"/>
+        <path d="M614 374 v-38 h212 v38 z" fill="#c2def8"/>
+        <path d="M660 336 v-30 h120 v30 z" fill="#dceefb"/>
+        <rect x="712" y="252" width="16" height="54" fill="#5ea3e6"/>
+        <circle cx="720" cy="240" r="17" fill="#2b4acb"/>
+        <circle cx="720" cy="240" r="26" stroke="#79c0f2" stroke-width="2" stroke-dasharray="4 6"/>
+      </g>
+      <!-- isometric block cluster, left -->
+      <g stroke="#24407e" stroke-width="1.4">
+        <path d="M60 470 v-70 l44 -24 v94 z" fill="#a9d2f4"/>
+        <path d="M104 470 v-94 l44 24 v70 z" fill="#79c0f2"/>
+        <path d="M60 400 l44 -24 44 24 -44 24 z" fill="#dceefb"/>
+        <path d="M168 470 v-52 l36 -20 v72 z" fill="#8fc3ee"/>
+        <path d="M204 470 v-72 l36 20 v52 z" fill="#5ea3e6"/>
+        <path d="M168 418 l36 -20 36 20 -36 20 z" fill="#c2def8"/>
+        <path d="M258 470 v-88 l40 -22 v110 z" fill="#79c0f2"/>
+        <path d="M298 470 v-110 l40 22 v88 z" fill="#2b4acb" opacity=".75"/>
+        <path d="M258 382 l40 -22 40 22 -40 22 z" fill="#a9d2f4"/>
+        <rect x="76" y="416" width="13" height="13" fill="#24407e"/>
+        <rect x="216" y="428" width="11" height="11" fill="#24407e"/>
+      </g>
+      <!-- signal dish + mast, right -->
+      <g>
+        <path d="M1216 470 l26 -120 h14 l26 120 z" fill="#5ea3e6"/>
+        <path d="M1249 350 a74 74 0 0 1 74 -74 l-14 44 a46 46 0 0 0 -46 46 z" fill="#a9d2f4" stroke="#24407e" stroke-width="1.6"/>
+        <path d="M1283 316 l52 -52" stroke="#24407e" stroke-width="2.4"/>
+        <circle cx="1341" cy="258" r="6" fill="#e8442e"/>
+        <path d="M1300 470 v-64 l34 -18 v82 z" fill="#8fc3ee"/>
+        <path d="M1334 470 v-82 l34 18 v64 z" fill="#79c0f2"/>
+        <path d="M1300 406 l34 -18 34 18 -34 18 z" fill="#dceefb"/>
+      </g>
+      <path d="M0 470 h1440" stroke="#24407e" stroke-width="2"/>
+    </svg>
+  </div>
+  <!-- finale : deep-blue night panorama closing the page behind the footer -->
+  <div class="bg-finale">
+    <svg viewBox="0 0 1440 440" preserveAspectRatio="xMidYMax slice" fill="none">
+      <defs>
+        <linearGradient id="finGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#243a75"/>
+          <stop offset="1" stop-color="#131e3e"/>
+        </linearGradient>
+      </defs>
+      <rect width="1440" height="440" fill="url(#finGrad)"/>
+      <rect width="1440" height="5" fill="#79c0f2" opacity=".5"/>
+      <g fill="#ffffff">
+        <circle cx="140" cy="70" r="2.2" opacity=".7"/><circle cx="330" cy="130" r="1.8" opacity=".5"/><circle cx="520" cy="60" r="2.4" opacity=".65"/>
+        <circle cx="700" cy="150" r="1.7" opacity=".45"/><circle cx="880" cy="80" r="2" opacity=".6"/><circle cx="1240" cy="180" r="1.8" opacity=".5"/>
+        <circle cx="1360" cy="70" r="2.3" opacity=".7"/><circle cx="60" cy="190" r="1.7" opacity=".45"/><circle cx="1180" cy="40" r="1.6" opacity=".5"/>
+        <circle cx="430" cy="200" r="1.6" opacity=".4"/><circle cx="990" cy="230" r="1.7" opacity=".4"/>
+      </g>
+      <circle cx="1058" cy="138" r="84" stroke="#79c0f2" stroke-width="19" opacity=".9"/>
+      <circle cx="1058" cy="138" r="117" stroke="#a8d8f8" stroke-width="1.5" stroke-dasharray="4 9" opacity=".75"/>
+      <circle cx="1058" cy="138" r="7" fill="#a8d8f8"/>
+      <!-- isometric silhouettes, left -->
+      <g>
+        <path d="M48 440 v-84 l46 -26 v110 z" fill="#2b4acb"/>
+        <path d="M94 440 V330 l46 26 v84 z" fill="#3f63c8"/>
+        <path d="M48 356 l46 -26 46 26 -46 26 z" fill="#79c0f2"/>
+        <path d="M164 440 v-56 l38 -21 v77 z" fill="#223a75"/>
+        <path d="M202 440 v-77 l38 21 v56 z" fill="#2b4acb"/>
+        <path d="M164 384 l38 -21 38 21 -38 21 z" fill="#5ea3e6"/>
+        <rect x="62" y="378" width="12" height="12" fill="#dceefb"/>
+        <rect x="62" y="402" width="12" height="12" fill="#dceefb" opacity=".55"/>
+      </g>
+      <!-- stepped terrace + beacon, centre -->
+      <g>
+        <path d="M520 440 v-34 h400 v34 z" fill="#3f63c8"/>
+        <path d="M566 406 v-30 h308 v30 z" fill="#5ea3e6"/>
+        <path d="M614 376 v-26 h212 v26 z" fill="#79c0f2"/>
+        <path d="M660 350 v-22 h120 v22 z" fill="#a8d8f8"/>
+        <rect x="713" y="282" width="14" height="46" fill="#79c0f2"/>
+        <circle cx="720" cy="268" r="13" fill="#ef7d1a"/>
+        <circle cx="720" cy="268" r="22" stroke="#a8d8f8" stroke-width="1.6" stroke-dasharray="4 6"/>
+      </g>
+      <!-- signal dish silhouette, right -->
+      <g>
+        <path d="M1252 440 l24 -104 h13 l24 104 z" fill="#3f63c8"/>
+        <path d="M1282 336 a66 66 0 0 1 66 -66 l-12 40 a41 41 0 0 0 -41 41 z" fill="#79c0f2"/>
+        <path d="M1314 306 l46 -46" stroke="#a8d8f8" stroke-width="2.4"/>
+        <circle cx="1366" cy="254" r="5.5" fill="#e8442e"/>
+      </g>
+      <path d="M0 440 h1440" stroke="#0d1530" stroke-width="3"/>
+    </svg>
+  </div>
 </div>
-<canvas id="bgCanvas" aria-hidden="true"></canvas>
-<div class="bg-vignette" aria-hidden="true"></div>
-<div class="noise" aria-hidden="true"></div>
+<div class="grain-dots" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<header id="siteHeader">
+<!-- opening screen: animated artwork only, deliberately no text at all.
+     All content lives below this full-viewport stage. -->
+<section class="intro-stage" aria-hidden="true">
+  <div class="intro-art">
+    <svg viewBox="0 0 720 560" fill="none">
+      <g class="intro-spin">
+        <circle cx="360" cy="258" r="196" stroke="#7cc1f2" stroke-width="26" opacity=".45"/>
+        <circle cx="360" cy="258" r="238" stroke="#8fc0ea" stroke-width="1.6" stroke-dasharray="4 11" opacity=".85"/>
+        <circle cx="598" cy="258" r="7" fill="#e8442e"/>
+        <rect x="128" y="66" width="10" height="10" fill="#ef7d1a" opacity=".9"/>
+      </g>
+      <g class="intro-spin-rev">
+        <circle cx="360" cy="258" r="128" stroke="#a8d8f8" stroke-width="15" opacity=".6"/>
+        <circle cx="360" cy="258" r="154" stroke="#5ea3e6" stroke-width="1.5" stroke-dasharray="3 9" opacity=".8"/>
+        <circle cx="232" cy="258" r="5.5" fill="#2b4acb"/>
+      </g>
+      <circle cx="360" cy="258" r="9" fill="#2b4acb"/>
+      <circle class="intro-pulse" cx="360" cy="258" r="22" stroke="#79c0f2" stroke-width="1.6" stroke-dasharray="4 6"/>
+      <g class="intro-float" stroke="#5ea3e6" stroke-width="1.8" opacity=".75">
+        <path d="M360 158 l56 33 v66 l-56 33 l-56 -33 v-66 z" fill="#dceefb" fill-opacity=".35"/>
+        <path d="M360 158 v66 m0 0 l56 -33 m-56 33 l-56 -33 m56 33 v66"/>
+      </g>
+      <g class="intro-float-2" stroke="#5ea3e6" stroke-width="1.5" opacity=".6">
+        <path d="M566 366 l36 21 v42 l-36 21 l-36 -21 v-42 z"/>
+        <path d="M566 366 v42 m0 0 l36 -21 m-36 21 l-36 -21 m36 21 v42"/>
+      </g>
+      <g stroke="#24407e" stroke-width="1.5">
+        <path d="M52 512 v-64 l40 -22 v86 z" fill="#a9d2f4"/>
+        <path d="M92 512 v-86 l40 22 v64 z" fill="#79c0f2"/>
+        <path d="M52 448 l40 -22 40 22 -40 22 z" fill="#dceefb"/>
+        <path d="M148 512 v-44 l32 -18 v62 z" fill="#8fc3ee"/>
+        <path d="M180 512 v-62 l32 18 v44 z" fill="#5ea3e6"/>
+        <path d="M148 468 l32 -18 32 18 -32 18 z" fill="#c2def8"/>
+      </g>
+      <g>
+        <path d="M470 512 v-26 h150 v26 z" fill="#8fc3ee"/>
+        <path d="M494 486 v-22 h102 v22 z" fill="#a9d2f4"/>
+        <path d="M516 464 v-18 h58 v18 z" fill="#c2def8"/>
+        <rect x="540" y="402" width="10" height="44" fill="#5ea3e6"/>
+        <circle class="intro-pulse" cx="545" cy="392" r="9" fill="#ef7d1a"/>
+        <circle cx="545" cy="392" r="16" stroke="#79c0f2" stroke-width="1.6" stroke-dasharray="3 5"/>
+      </g>
+      <g stroke="#2b4acb" stroke-width="1.6" opacity=".55">
+        <path d="M84 84 h64 M116 52 v64"/>
+        <circle cx="116" cy="84" r="44" stroke-dasharray="4 9"/>
+      </g>
+      <g fill="#8fc0ea">
+        <circle cx="212" cy="120" r="3"/><circle cx="520" cy="96" r="2.6"/><circle cx="618" cy="180" r="3"/>
+        <circle cx="96" cy="300" r="2.4"/><circle cx="648" cy="330" r="2.4"/><circle cx="252" cy="452" r="2.6"/>
+        <circle cx="432" cy="470" r="2.2"/>
+      </g>
+      <rect x="618" y="452" width="8" height="8" fill="#2b4acb" opacity=".55"/>
+      <path d="M20 512 h680" stroke="#24407e" stroke-width="2" opacity=".7"/>
+    </svg>
+  </div>
+  <div class="intro-chevron">
+    <svg width="36" height="22" viewBox="0 0 36 22" fill="none"><path d="M4 4 l14 13 L32 4" stroke="#ef7d1a" stroke-width="3.4" stroke-linecap="square"/></svg>
+  </div>
+</section>
+
+<header>
   <div class="wrap header-in">
-    <a class="wordmark" href="#top"><span class="wordmark-mark">E</span>Elowen</a>
-    <div class="lang-switch" role="group" aria-label="Language">
-      <button type="button" data-lang="zh" class="active" aria-pressed="true">中文</button>
-      <button type="button" data-lang="en" aria-pressed="false">EN</button>
-      <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+    <div class="win">
+      <div class="win-bar">
+        <span class="wb-ico">SYS</span>
+        <a class="wordmark" href="#top">ELOWEN<b>.</b>BLOG</a>
+        <nav aria-label="Main">
+          <a href="#projects" data-i18n="navProjects">项目</a>
+          <a href="#about" data-i18n="navAbout">原则</a>
+          <a class="gh" href="https://github.com/ybx77" target="_blank" rel="noopener">GitHub ↗</a>
+        </nav>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="zh" class="active" aria-pressed="true">中文</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+        </div>
+        <span class="win-btns" aria-hidden="true"><i>–</i><i>□</i><i class="hot">✕</i></span>
+      </div>
     </div>
-    <nav aria-label="Main">
-      <a href="#projects" data-i18n="navProjects">项目</a>
-      <a href="#about" data-i18n="navAbout">原则</a>
-      <a class="gh" href="https://github.com/ybx77" target="_blank" rel="noopener">GitHub ↗</a>
-    </nav>
   </div>
 </header>
 
 <main class="wrap" id="top">
   <section class="hero">
-    <div>
-      <div class="hero-kicker" data-i18n="heroKicker">个人博客 · 技术与开发</div>
-      <h1>
-        <span class="line-mask"><span class="line-inner" style="--d:.05s" data-i18n="heroTitle1">以代码解决</span></span>
-        <span class="line-mask"><span class="line-inner" style="--d:.16s"><span data-i18n="heroTitle2a">实际</span><em data-i18n="heroTitle2b">问题。</em></span></span>
-      </h1>
-      <p class="hero-lede" data-i18n="heroLede">Elowen 的个人博客，记录已完成且可公开访问的软件项目：系统工具、桌面应用与网页工具，全部提供源代码。</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#projects"><span data-i18n="btnProjects">查看项目</span> <span aria-hidden="true">↓</span></a>
-        <a class="btn ghost" href="https://github.com/ybx77" target="_blank" rel="noopener">GitHub @ybx77 ↗</a>
+    <div class="hero-grid">
+      <div class="win about-win reveal-slide">
+        <div class="win-bar"><span class="wb-ico">TXT</span><span>ABOUT.TXT</span><span class="win-btns" aria-hidden="true"><i>–</i><i>□</i><i>✕</i></span></div>
+        <div class="win-body">
+          <p class="hero-kicker" data-i18n="heroKicker">个人博客 · 技术与开发</p>
+          <h1>
+            <span data-i18n="heroTitle1">以代码解决</span><br>
+            <span data-i18n="heroTitle2a">实际</span><em data-i18n="heroTitle2b">问题</em><span class="accent" data-i18n="heroPeriod">。</span>
+          </h1>
+          <p class="hero-lede" data-i18n="heroLede">Elowen 的个人博客，记录已完成且可公开访问的软件项目：系统工具、桌面应用与网页工具，全部提供源代码。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#projects"><span data-i18n="btnProjects">查看项目</span> <span aria-hidden="true">▾</span></a>
+            <a class="btn" href="https://github.com/ybx77" target="_blank" rel="noopener">GitHub @ybx77 ↗</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong><span data-count="4">0</span><i data-i18n="unitProjects"> 个</i></strong><span data-i18n="statProjects">精选项目</span></div>
+            <div class="stat"><strong><span data-count="3">0</span><i data-i18n="unitLangs"> 种</i></strong><span data-i18n="statLangs">主要语言</span></div>
+            <div class="stat"><strong>2022</strong><span data-i18n="statSince">开始公开代码</span></div>
+          </div>
+          <div class="scroll-cue" aria-hidden="true"><span>SCROLL</span><span class="chev">▾▾</span><span class="line"></span></div>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div class="stat"><strong><span data-count="4">0</span><i data-i18n="unitProjects"> 个</i></strong><span data-i18n="statProjects">精选项目</span></div>
-        <div class="stat"><strong><span data-count="3">0</span><i data-i18n="unitLangs"> 种</i></strong><span data-i18n="statLangs">主要语言</span></div>
-        <div class="stat"><strong>2022</strong><span data-i18n="statSince">开始公开代码</span></div>
+      <div class="win console-win reveal-slide" id="heroStage">
+        <div class="win-bar"><span class="wb-ico">EXE</span><span>SYNC_MONITOR.EXE</span><span class="win-btns" aria-hidden="true"><i>–</i><i>□</i><i>✕</i></span></div>
+        <div class="win-body">
+          <div id="heroVisual"></div>
+          <div class="sync-caption"><span data-i18n="syncCaption">存档 · 相册 · 游玩记录</span><b>SYNC READY</b></div>
+        </div>
       </div>
-      <div class="scroll-cue" aria-hidden="true"><span class="track"></span><span>SCROLL</span><span class="line"></span></div>
     </div>
-    <div class="hero-stage" id="heroStage">
-      <div class="console-card" id="mainConsole" aria-hidden="true">
-        <div class="console-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>switch-cloud-sync — local network</span></div>
-        <div id="heroVisual"></div>
-        <div class="sync-caption"><span data-i18n="syncCaption">存档 · 相册 · 游玩记录</span><b>SYNC READY</b></div>
-      </div>
+    <div class="win hero-note reveal-slide" aria-hidden="true">
+      <div class="win-bar"><span>NOTE</span></div>
+      <div class="win-body">EST. 2022 — ALL PROJECTS OPEN SOURCE</div>
     </div>
   </section>
 
   <section class="section" id="projects">
     <div class="sec-head reveal" data-variant="left">
-      <div class="sec-index">01 / WORK</div>
-      <div>
-        <h2 data-i18n="secProjectsTitle">精选项目</h2>
-        <p data-i18n="secProjectsDesc">按完成度与实用性筛选。点击项目查看技术细节。</p>
-      </div>
+      <span class="sec-tag">01 / WORK</span>
+      <h2 data-i18n="secProjectsTitle">精选项目</h2>
+      <p data-i18n="secProjectsDesc">按完成度与实用性筛选。点击项目查看技术细节。</p>
     </div>
     <div class="sec-rule reveal"></div>
 
-    <div class="toolbar reveal-slide">
-      <div class="filters" id="filters" role="group" aria-label="Filter">
-        <button class="fbtn active" data-f="all" aria-pressed="true" data-i18n="filterAll">全部</button>
-        <button class="fbtn" data-f="system" aria-pressed="false" data-i18n="filterSystem">系统与桌面</button>
-        <button class="fbtn" data-f="web" aria-pressed="false" data-i18n="filterWeb">网页工具</button>
+    <div class="win toolbar-win reveal-slide">
+      <div class="win-bar"><span class="wb-ico">DIR</span><span>FILTER.DIR</span><span class="win-btns" aria-hidden="true"><i>–</i><i>□</i><i>✕</i></span></div>
+      <div class="toolbar-in">
+        <div class="filters" id="filters" role="group" aria-label="Filter">
+          <button class="fbtn active" data-f="all" aria-pressed="true" data-i18n="filterAll">全部</button>
+          <button class="fbtn" data-f="system" aria-pressed="false" data-i18n="filterSystem">系统与桌面</button>
+          <button class="fbtn" data-f="web" aria-pressed="false" data-i18n="filterWeb">网页工具</button>
+        </div>
+        <span class="result-count" id="resultCount">4 PROJECTS</span>
+        <label class="search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.4"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <input id="searchInput" type="search" placeholder="搜索项目或技术…" aria-label="Search">
+        </label>
       </div>
-      <span class="result-count" id="resultCount">4 PROJECTS</span>
-      <label class="search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="searchInput" type="search" placeholder="搜索项目或技术…" aria-label="Search">
-      </label>
     </div>
 
     <div id="featuredSlot"></div>
     <div class="proj-grid" id="projList"></div>
-    <div class="empty" id="emptyState"><strong data-i18n="emptyTitle">未找到匹配项目</strong><span data-i18n="emptyDesc">请更换关键词，或前往 GitHub 查看全部仓库。</span></div>
+    <div class="empty win" id="emptyState"><div class="win-body"><strong data-i18n="emptyTitle">未找到匹配项目</strong><span data-i18n="emptyDesc">请更换关键词，或前往 GitHub 查看全部仓库。</span></div></div>
   </section>
 
   <section class="section" id="about">
     <div class="sec-head reveal" data-variant="left">
-      <div class="sec-index">02 / METHOD</div>
-      <div>
-        <h2 data-i18n="secAboutTitle">开发原则</h2>
-        <p data-i18n="secAboutDesc">三项贯穿全部项目的基本原则。</p>
-      </div>
+      <span class="sec-tag">02 / METHOD</span>
+      <h2 data-i18n="secAboutTitle">开发原则</h2>
+      <p data-i18n="secAboutDesc">三项贯穿全部项目的基本原则。</p>
     </div>
     <div class="sec-rule reveal"></div>
 
     <div class="principles" id="principles"></div>
 
-    <div class="stack-strip reveal" data-variant="scale">
-      <h3 data-i18n="stackTitle">常用技术</h3>
-      <div class="stack-list">
-        <span>C++ / libnx</span><span>Python</span><span>Electron</span><span>JavaScript</span>
-        <span>Tesseract.js</span><span>Canvas</span><span>ZIP + SHA-256</span>
+    <div class="win stack-win reveal">
+      <div class="stack-in">
+        <h3 data-i18n="stackTitle">常用技术</h3>
+        <div class="stack-list">
+          <span>C++ / libnx</span><span>Python</span><span>Electron</span><span>JavaScript</span>
+          <span>Tesseract.js</span><span>Canvas</span><span>ZIP + SHA-256</span>
+        </div>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="footer-in">
-      <span>© 2026 Elowen</span>
-      <span><span data-i18n="footerSource">源代码：</span><a href="https://github.com/ybx77" target="_blank" rel="noopener">github.com/ybx77</a></span>
-      <a class="to-top" href="#top"><span data-i18n="toTop">返回顶部</span> <b>↑</b></a>
+    <div class="win">
+      <div class="footer-in">
+        <span>© 2026 ELOWEN</span>
+        <span><span data-i18n="footerSource">源代码：</span><a href="https://github.com/ybx77" target="_blank" rel="noopener">github.com/ybx77</a></span>
+        <a class="to-top" href="#top"><span data-i18n="toTop">返回顶部</span> <b>↑</b></a>
+      </div>
     </div>
   </footer>
 </main>
 
 <div class="reader" id="reader" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="reader-panel">
-    <div class="reader-bar">
-      <span class="drag" aria-hidden="true"></span>
+  <div class="reader-panel win">
+    <div class="win-bar">
+      <span class="wb-ico">DOC</span>
       <span class="repo" id="readerRepo">repo</span>
       <button class="close-btn" id="readerClose" aria-label="Close">✕</button>
     </div>
@@ -588,19 +811,19 @@ var currentLang="zh";
 })();
 
 var UI={
-zh:{docLang:"zh-CN",title:"Elowen — 个人博客",navProjects:"项目",navAbout:"原则",heroKicker:"个人博客 · 技术与开发",heroTitle1:"以代码解决",heroTitle2a:"实际",heroTitle2b:"问题。",heroLede:"Elowen 的个人博客，记录已完成且可公开访问的软件项目：系统工具、桌面应用与网页工具，全部提供源代码。",btnProjects:"查看项目",unitProjects:" 个",statProjects:"精选项目",unitLangs:" 种",statLangs:"主要语言",statSince:"开始公开代码",syncCaption:"存档 · 相册 · 游玩记录",secProjectsTitle:"精选项目",secProjectsDesc:"按完成度与实用性筛选。点击项目查看技术细节。",filterAll:"全部",filterSystem:"系统与桌面",filterWeb:"网页工具",searchPh:"搜索项目或技术…",emptyTitle:"未找到匹配项目",emptyDesc:"请更换关键词，或前往 GitHub 查看全部仓库。",secAboutTitle:"开发原则",secAboutDesc:"三项贯穿全部项目的基本原则。",stackTitle:"常用技术",footerSource:"源代码：",toTop:"返回顶部",featured:"重点项目",githubBtn:"GitHub 仓库 ↗",liveBtn:"在线访问 ↗",keyPoints:"技术要点",stackHead:"技术栈",projectsUnit:"PROJECTS",
+zh:{docLang:"zh-CN",title:"Elowen — 个人博客",navProjects:"项目",navAbout:"原则",heroKicker:"个人博客 · 技术与开发",heroTitle1:"以代码解决",heroTitle2a:"实际",heroTitle2b:"问题",heroPeriod:"。",heroLede:"Elowen 的个人博客，记录已完成且可公开访问的软件项目：系统工具、桌面应用与网页工具，全部提供源代码。",btnProjects:"查看项目",unitProjects:" 个",statProjects:"精选项目",unitLangs:" 种",statLangs:"主要语言",statSince:"开始公开代码",syncCaption:"存档 · 相册 · 游玩记录",secProjectsTitle:"精选项目",secProjectsDesc:"按完成度与实用性筛选。点击项目查看技术细节。",filterAll:"全部",filterSystem:"系统与桌面",filterWeb:"网页工具",searchPh:"搜索项目或技术…",emptyTitle:"未找到匹配项目",emptyDesc:"请更换关键词，或前往 GitHub 查看全部仓库。",secAboutTitle:"开发原则",secAboutDesc:"三项贯穿全部项目的基本原则。",stackTitle:"常用技术",footerSource:"源代码：",toTop:"返回顶部",featured:"重点项目",githubBtn:"GitHub 仓库 ↗",liveBtn:"在线访问 ↗",keyPoints:"技术要点",stackHead:"技术栈",projectsUnit:"PROJECTS",openDetail:"详情 →",
 principles:[
  {k:"LESS DEPENDENCY",t:"减少依赖",d:"优先使用标准库与平台原生能力，降低长期维护成本。"},
  {k:"LOCAL FIRST",t:"本地优先",d:"数据优先保存在用户控制的设备与服务器中处理和存储。"},
  {k:"COMPLETE & VERIFIED",t:"完成后再发布",d:"仅收录已完成、可运行并经过验证的项目。"}
 ]},
-en:{docLang:"en",title:"Elowen — Personal Blog",navProjects:"Projects",navAbout:"Principles",heroKicker:"Personal Blog · Technology & Development",heroTitle1:"Building software",heroTitle2a:"for ",heroTitle2b:"real problems.",heroLede:"The personal blog of Elowen, documenting completed and publicly available software: system utilities, desktop applications, and web tools, all with source code.",btnProjects:"View projects",unitProjects:"",statProjects:"Featured projects",unitLangs:"",statLangs:"Primary languages",statSince:"Publishing code since",syncCaption:"Saves · Album · Play records",secProjectsTitle:"Featured Projects",secProjectsDesc:"Selected by completeness and practical value. Select a project for technical details.",filterAll:"All",filterSystem:"System & Desktop",filterWeb:"Web Tools",searchPh:"Search projects or technologies…",emptyTitle:"No matching projects",emptyDesc:"Try a different keyword, or browse all repositories on GitHub.",secAboutTitle:"Principles",secAboutDesc:"Three principles applied across all projects.",stackTitle:"Technologies",footerSource:"Source code: ",toTop:"Back to top",featured:"Featured",githubBtn:"GitHub Repository ↗",liveBtn:"Live Site ↗",keyPoints:"KEY POINTS",stackHead:"STACK",projectsUnit:"PROJECTS",
+en:{docLang:"en",title:"Elowen — Personal Blog",navProjects:"Projects",navAbout:"Principles",heroKicker:"Personal Blog · Technology & Development",heroTitle1:"Building software",heroTitle2a:"for ",heroTitle2b:"real problems",heroPeriod:".",heroLede:"The personal blog of Elowen, documenting completed and publicly available software: system utilities, desktop applications, and web tools, all with source code.",btnProjects:"View projects",unitProjects:"",statProjects:"Featured projects",unitLangs:"",statLangs:"Primary languages",statSince:"Publishing code since",syncCaption:"Saves · Album · Play records",secProjectsTitle:"Featured Projects",secProjectsDesc:"Selected by completeness and practical value. Select a project for technical details.",filterAll:"All",filterSystem:"System & Desktop",filterWeb:"Web Tools",searchPh:"Search projects or technologies…",emptyTitle:"No matching projects",emptyDesc:"Try a different keyword, or browse all repositories on GitHub.",secAboutTitle:"Principles",secAboutDesc:"Three principles applied across all projects.",stackTitle:"Technologies",footerSource:"Source code: ",toTop:"Back to top",featured:"Featured",githubBtn:"GitHub Repository ↗",liveBtn:"Live Site ↗",keyPoints:"KEY POINTS",stackHead:"STACK",projectsUnit:"PROJECTS",openDetail:"DETAILS →",
 principles:[
  {k:"LESS DEPENDENCY",t:"Fewer dependencies",d:"Prefer standard libraries and native platform capabilities to reduce long-term maintenance cost."},
  {k:"LOCAL FIRST",t:"Local first",d:"Process and store data on devices and servers under the user's control, wherever possible."},
  {k:"COMPLETE & VERIFIED",t:"Ship only when complete",d:"Only completed, runnable, and verified projects are listed here."}
 ]},
-ja:{docLang:"ja",title:"Elowen — 個人ブログ",navProjects:"プロジェクト",navAbout:"原則",heroKicker:"個人ブログ · 技術と開発",heroTitle1:"実用的な",heroTitle2a:"ソフトウェアを",heroTitle2b:"構築する。",heroLede:"Elowen の個人ブログ。完成し公開されているソフトウェアプロジェクト（システムツール、デスクトップアプリ、Web ツール）を記録し、いずれもソースコードを公開しています。",btnProjects:"プロジェクトを見る",unitProjects:"件",statProjects:"厳選プロジェクト",unitLangs:"言語",statLangs:"主な言語",statSince:"コード公開開始",syncCaption:"セーブ · アルバム · プレイ記録",secProjectsTitle:"厳選プロジェクト",secProjectsDesc:"完成度と実用性で選定。各プロジェクトを選択すると技術詳細を表示します。",filterAll:"すべて",filterSystem:"システム・デスクトップ",filterWeb:"Web ツール",searchPh:"プロジェクトや技術を検索…",emptyTitle:"該当するプロジェクトがありません",emptyDesc:"キーワードを変更するか、GitHub で全リポジトリをご覧ください。",secAboutTitle:"開発原則",secAboutDesc:"すべてのプロジェクトに共通する3つの原則。",stackTitle:"主な技術",footerSource:"ソースコード：",toTop:"トップへ戻る",featured:"注目プロジェクト",githubBtn:"GitHub リポジトリ ↗",liveBtn:"ライブサイト ↗",keyPoints:"技術ポイント",stackHead:"技術スタック",projectsUnit:"PROJECTS",
+ja:{docLang:"ja",title:"Elowen — 個人ブログ",navProjects:"プロジェクト",navAbout:"原則",heroKicker:"個人ブログ · 技術と開発",heroTitle1:"実用的な",heroTitle2a:"ソフトウェアを",heroTitle2b:"構築する",heroPeriod:"。",heroLede:"Elowen の個人ブログ。完成し公開されているソフトウェアプロジェクト（システムツール、デスクトップアプリ、Web ツール）を記録し、いずれもソースコードを公開しています。",btnProjects:"プロジェクトを見る",unitProjects:"件",statProjects:"厳選プロジェクト",unitLangs:"言語",statLangs:"主な言語",statSince:"コード公開開始",syncCaption:"セーブ · アルバム · プレイ記録",secProjectsTitle:"厳選プロジェクト",secProjectsDesc:"完成度と実用性で選定。各プロジェクトを選択すると技術詳細を表示します。",filterAll:"すべて",filterSystem:"システム・デスクトップ",filterWeb:"Web ツール",searchPh:"プロジェクトや技術を検索…",emptyTitle:"該当するプロジェクトがありません",emptyDesc:"キーワードを変更するか、GitHub で全リポジトリをご覧ください。",secAboutTitle:"開発原則",secAboutDesc:"すべてのプロジェクトに共通する3つの原則。",stackTitle:"主な技術",footerSource:"ソースコード：",toTop:"トップへ戻る",featured:"注目プロジェクト",githubBtn:"GitHub リポジトリ ↗",liveBtn:"ライブサイト ↗",keyPoints:"技術ポイント",stackHead:"技術スタック",projectsUnit:"PROJECTS",openDetail:"詳細 →",
 principles:[
  {k:"LESS DEPENDENCY",t:"依存を最小限に",d:"標準ライブラリとプラットフォーム標準機能を優先し、長期的な保守コストを抑えます。"},
  {k:"LOCAL FIRST",t:"ローカル優先",d:"データは可能な限り、ユーザーが管理するデバイスとサーバーで処理・保存します。"},
@@ -609,7 +832,7 @@ principles:[
 };
 
 var PROJECTS=[
-{id:"switch-cloud-sync",featured:true,cat:"system",year:"2026",lang:"C++",langColor:"#b3a284",num:"01",
+{id:"switch-cloud-sync",featured:true,cat:"system",year:"2026",lang:"C++",langColor:"#2b4acb",num:"01",
  metrics:{zh:["增量去重","ZIP + SHA-256","服务端零依赖","版本历史"],en:["Incremental dedup","ZIP + SHA-256","Zero-dependency server","Version history"],ja:["増分重複排除","ZIP + SHA-256","サーバー依存ゼロ","バージョン履歴"]},
  title:{zh:"Switch 云存档同步",en:"Switch Cloud Save Sync",ja:"Switch クラウドセーブ同期"},
  desc:{zh:"将游戏存档、相册与游玩记录自动备份至自有服务器，并支持历史版本恢复。",en:"Automatically backs up game saves, albums, and play records to a self-hosted server, with restore from version history.",ja:"ゲームセーブ、アルバム、プレイ記録を自宅サーバーへ自動バックアップし、履歴からの復元に対応します。"},
@@ -621,7 +844,7 @@ var PROJECTS=[
  },
  stack:["C++","libnx / Atmosphère","Python stdlib","ZIP + SHA-256"],
  github:"https://github.com/ybx77/switch-cloud-sync"},
-{id:"cc-quota-monitor",cat:"system",year:"2026",lang:"JavaScript",langColor:"#c2b28c",num:"02",
+{id:"cc-quota-monitor",cat:"system",year:"2026",lang:"JavaScript",langColor:"#5ea3e6",num:"02",
  metrics:{zh:["三档额度","耗尽预测","本地采样","零运行时依赖"],en:["Three quota windows","Depletion forecast","Local sampling","Zero runtime deps"],ja:["3つの上限枠","枯渇予測","ローカルサンプリング","ランタイム依存ゼロ"]},
  title:{zh:"CC Quota Monitor · 额度监控",en:"CC Quota Monitor",ja:"CC Quota Monitor · 上限モニター"},
  desc:{zh:"在桌面集中显示 5 小时、每周与每月三档额度的余量与重置时间。",en:"Displays remaining quota and reset times for the 5-hour, weekly, and monthly windows on the desktop.",ja:"5時間・週間・月間の3つの上限枠について、残量とリセット時刻をデスクトップに表示します。"},
@@ -633,7 +856,7 @@ var PROJECTS=[
  },
  stack:["Electron 31","Node.js ≥ 18","Local sampling","MIT"],
  github:"https://github.com/ybx77/cc-quota-monitor"},
-{id:"perler-bead-pattern",cat:"web",year:"2025",lang:"JavaScript",langColor:"#c2b28c",num:"03",
+{id:"perler-bead-pattern",cat:"web",year:"2025",lang:"JavaScript",langColor:"#5ea3e6",num:"03",
  metrics:{zh:["5 个品牌色卡","自动配色","用量统计","纯前端处理"],en:["5 brand palettes","Automatic matching","Bead counts","Fully client-side"],ja:["5ブランドの色見本","自動配色","使用量集計","完全クライアント処理"]},
  title:{zh:"拼豆图案生成器",en:"Perler Bead Pattern Generator",ja:"アイロンビーズ図案ジェネレーター"},
  desc:{zh:"将图片转换为带有品牌色号与用量统计的拼豆图纸。",en:"Converts an image into a perler bead pattern with brand color codes and bead counts.",ja:"画像を、ブランド色番号と使用量集計付きのアイロンビーズ図案に変換します。"},
@@ -645,7 +868,7 @@ var PROJECTS=[
  },
  stack:["JavaScript","Canvas","Color-distance matching","Client-side only"],
  github:"https://github.com/ybx77/perler-bead-pattern",live:"https://beads-liart.vercel.app"},
-{id:"grade-ocr-entry",cat:"web",year:"2026",lang:"HTML / JS",langColor:"#a89a83",num:"04",
+{id:"grade-ocr-entry",cat:"web",year:"2026",lang:"HTML / JS",langColor:"#79c0f2",num:"04",
  metrics:{zh:["本地 OCR","名单校验","确认后入库","CSV 导出"],en:["Local OCR","Roster validation","Confirm before save","CSV export"],ja:["ローカル OCR","名簿照合","確認後に保存","CSV エクスポート"]},
  title:{zh:"成绩录入 · OCR 版",en:"Grade Entry · OCR Edition",ja:"成績入力 · OCR 版"},
  desc:{zh:"通过拍照识别实验报告中的姓名与分数，经确认后导出为表格。",en:"Recognizes names and scores from photos of lab reports, for review before export to a spreadsheet.",ja:"実験レポートの写真から氏名と得点を認識し、確認後に表形式でエクスポートします。"},
@@ -653,26 +876,32 @@ var PROJECTS=[
  points:{
   zh:[["拍照识别","Tesseract.js 在浏览器本地运行 OCR，支持中英文。"],["名单交叉校验","识别姓名自动与班级名单比对，降低错录风险。"],["先确认再入库","识别结果经人工核对后才保存。"],["纯前端","照片与成绩均保留在本机，不上传服务器。"]],
   en:[["Photo recognition","Tesseract.js runs OCR locally in the browser, in Chinese and English."],["Roster cross-check","Recognized names are matched against the class roster to reduce errors."],["Confirm before save","Results are stored only after manual review."],["Fully client-side","Photos and grades stay on the local device and are never uploaded."]],
-  ja:[["写真認識","Tesseract.js がブラウザ内で OCR を実行し、中国語と英語に対応します。"],["名簿との照合","認識した氏名をクラス名簿と自動で照合し、誤入力を防ぎます。"],["確認後に保存","認識結果は手動確認後にのみ保存されます。"],["完全クライアント処理","写真と成績は端末内に留まり、アップロードされません。"]]
+  ja:[["写真認識","Tesseract.js がブラウザ内で OCR を実行し、認識した氏名をクラス名簿と自動で照合します。"],["名簿との照合","認識した氏名をクラス名簿と自動で照合し、誤入力を防ぎます。"],["確認後に保存","認識結果は手動確認後にのみ保存されます。"],["完全クライアント処理","写真と成績は端末内に留まり、アップロードされません。"]]
  },
  stack:["Tesseract.js","Camera API","Roster import","CSV export"],
  github:"https://github.com/ybx77/grade-ocr-entry",live:"https://chengji-peach.vercel.app"}
 ];
+</script>
 
+<script>
 var currentFilter="all", currentQuery="";
 var reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function L(obj){return obj[currentLang]||obj.zh}
 function t(){return UI[currentLang]}
 
+function barHtml(p,ico){
+  return '<div class="win-bar"><span class="wb-ico">'+ico+'</span><span>'+p.id.toUpperCase()+'.EXE</span><span class="win-btns" aria-hidden="true"><i>–</i><i>□</i><i>✕</i></span></div>';
+}
 function metaHtml(p){return '<div class="p-meta"><span><span class="lang-dot" style="background:'+p.langColor+'"></span>'+p.lang+'</span><span>'+p.year+'</span><span class="repo">ybx77/'+p.id+'</span></div>'}
 function chipsHtml(p){return '<div class="chips">'+L(p.metrics).map(function(x){return '<span class="chip">'+x+'</span>'}).join("")+'</div>'}
 function linksHtml(p,primary){
   var h='<div class="p-links"><a class="p-link'+(primary?' primary':'')+'" href="'+p.github+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+t().githubBtn+'</a>';
   if(p.live) h+='<a class="p-link" href="'+p.live+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+t().liveBtn+'</a>';
-  h+='<span class="open-hint" aria-hidden="true">↗</span></div>'; return h;
+  h+='<span class="open-hint" aria-hidden="true">'+t().openDetail+'</span></div>'; return h;
 }
-function beadSpans(count,palette,shape){
-  var h=""; for(var i=0;i<count;i++){var c=palette[i%palette.length]; if(shape&&i%9===4)c="#e09a4f"; h+='<i style="--c:'+c+';--d:'+((i%13)*0.11)+'s"></i>';} return h;
+function beadSpans(count){
+  var palette=["#2b4acb","#79c0f2","#a8d8f8","#1d3266","#dceefb","#5ea3e6"];
+  var h=""; for(var i=0;i<count;i++){var c=palette[i%palette.length]; if(i%17===8)c="#ef7d1a"; if(i%23===15)c="#e8442e"; h+='<i style="--c:'+c+';--d:'+((i%13)*0.11)+'s"></i>';} return h;
 }
 function visualHtml(id){
   if(id==="switch-cloud-sync"){
@@ -680,23 +909,23 @@ function visualHtml(id){
     +'<svg class="sync-svg" viewBox="0 0 560 300" role="img" aria-label="Sync diagram">'
     +'<circle class="sync-ring" cx="280" cy="150" r="104"/>'
     +'<path class="sync-path" d="M178 118 C235 72,325 72,382 118"/><path class="sync-path" d="M382 190 C325 232,235 232,178 190"/>'
-    +'<circle r="6" fill="#e09a4f"><animateMotion dur="3.4s" repeatCount="indefinite" path="M178 118 C235 72,325 72,382 118"/></circle>'
-    +'<circle r="5" fill="#c6c1b1"><animateMotion dur="4.1s" repeatCount="indefinite" path="M382 190 C325 232,235 232,178 190"/></circle>'
-    +'<g><rect x="62" y="88" width="116" height="132" rx="22" fill="#20241f" stroke="#4a5147"/><rect x="80" y="108" width="80" height="62" rx="8" fill="#30382d"/><circle cx="98" cy="190" r="7" fill="#e09a4f"/><rect x="124" y="184" width="28" height="8" rx="4" fill="#596154"/><text x="120" y="248" text-anchor="middle" fill="#c9c3b3" font-size="13" font-family="JetBrains Mono">SWITCH</text></g>'
-    +'<g><rect x="382" y="82" width="118" height="142" rx="16" fill="#20241f" stroke="#4a5147"/><rect x="402" y="104" width="78" height="14" rx="7" fill="#394233"/><rect x="402" y="132" width="78" height="14" rx="7" fill="#394233"/><rect x="402" y="160" width="52" height="14" rx="7" fill="#e09a4f" opacity=".82"/><circle cx="472" cy="190" r="5" fill="#e09a4f"><animate attributeName="opacity" values="1;.25;1" dur="1.8s" repeatCount="indefinite"/></circle><text x="441" y="248" text-anchor="middle" fill="#c9c3b3" font-size="13" font-family="JetBrains Mono">SERVER</text></g>'
-    +'<g transform="translate(280 150)"><circle r="29" fill="#171a17" stroke="#e09a4f"/><path d="M-13 0a13 13 0 0 1 22-9M13 0A13 13 0 0 1-9 9" fill="none" stroke="#f2ecdc" stroke-width="2.4" stroke-linecap="round"/><path d="M11-15v7h-7M-11 15v-7h7" fill="none" stroke="#f2ecdc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="11s" repeatCount="indefinite"/></path></g>'
+    +'<circle r="6" fill="#ef7d1a"><animateMotion dur="3.4s" repeatCount="indefinite" path="M178 118 C235 72,325 72,382 118"/></circle>'
+    +'<circle r="5" fill="#2b4acb"><animateMotion dur="4.1s" repeatCount="indefinite" path="M382 190 C325 232,235 232,178 190"/></circle>'
+    +'<g><rect x="62" y="88" width="116" height="132" fill="#ffffff" stroke="#24407e" stroke-width="2"/><rect x="80" y="108" width="80" height="62" fill="#a8d8f8" stroke="#24407e" stroke-width="1.5"/><circle cx="98" cy="190" r="7" fill="#e8442e"/><rect x="124" y="184" width="28" height="8" fill="#5ea3e6"/><text x="120" y="248" text-anchor="middle" fill="#16265e" font-size="13" font-family="JetBrains Mono">SWITCH</text></g>'
+    +'<g><rect x="382" y="82" width="118" height="142" fill="#ffffff" stroke="#24407e" stroke-width="2"/><rect x="402" y="104" width="78" height="14" fill="#79c0f2"/><rect x="402" y="132" width="78" height="14" fill="#79c0f2"/><rect x="402" y="160" width="52" height="14" fill="#ef7d1a"/><circle cx="472" cy="190" r="5" fill="#2b4acb"><animate attributeName="opacity" values="1;.25;1" dur="1.8s" repeatCount="indefinite"/></circle><text x="441" y="248" text-anchor="middle" fill="#16265e" font-size="13" font-family="JetBrains Mono">SERVER</text></g>'
+    +'<g transform="translate(280 150)"><circle r="29" fill="#ffffff" stroke="#24407e" stroke-width="2"/><path d="M-13 0a13 13 0 0 1 22-9M13 0A13 13 0 0 1-9 9" fill="none" stroke="#2b4acb" stroke-width="2.4" stroke-linecap="round"/><path d="M11-15v7h-7M-11 15v-7h7" fill="none" stroke="#2b4acb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="11s" repeatCount="indefinite"/></path></g>'
     +'</svg></div>';
   }
   if(id==="cc-quota-monitor"){
     return '<div class="project-visual visual-quota"><span class="visual-label">QUOTA / THREE WINDOWS</span><div class="quota-window">'
-    +'<div class="quota-row"><span>5 HRS</span><div class="quota-track"><div class="quota-fill" style="--w:68%;--c:#e09a4f"></div></div><span>RESET</span></div>'
-    +'<div class="quota-row"><span>WEEK</span><div class="quota-track"><div class="quota-fill" style="--w:52%;--c:#b9b2a0;animation-delay:.25s"></div></div><span>RESET</span></div>'
-    +'<div class="quota-row"><span>MONTH</span><div class="quota-track"><div class="quota-fill" style="--w:79%;--c:#7c7668;animation-delay:.5s"></div></div><span>RESET</span></div>'
+    +'<div class="quota-row"><span>5 HRS</span><div class="quota-track"><div class="quota-fill" style="--w:68%;--c:#ef7d1a"></div></div><span>RESET</span></div>'
+    +'<div class="quota-row"><span>WEEK</span><div class="quota-track"><div class="quota-fill" style="--w:52%;--c:#2b4acb;animation-delay:.25s"></div></div><span>RESET</span></div>'
+    +'<div class="quota-row"><span>MONTH</span><div class="quota-track"><div class="quota-fill" style="--w:79%;--c:#79c0f2;animation-delay:.5s"></div></div><span>RESET</span></div>'
     +'<small>LOCAL SAMPLES · BURN RATE · FORECAST</small></div></div>';
   }
   if(id==="perler-bead-pattern"){
     return '<div class="project-visual visual-beads"><span class="visual-label">PATTERN / COLOR MATCH</span><div class="bead-art">'
-    +beadSpans(60,["#b98a6a","#e09a4f","#d3ba7d","#b5ad96","#8f8a76","#e9dfc8","#8a6f4d"],true)+'</div></div>';
+    +beadSpans(60)+'</div></div>';
   }
   return '<div class="project-visual visual-ocr"><span class="visual-label">OCR / VERIFY BEFORE SAVE</span><div class="ocr-sheet"><div class="ocr-lines"><i></i><i></i><i></i><i></i><span class="scan-beam"></span></div><div class="ocr-result"><span>NAME ✓</span><span>SCORE ✓</span><span>ROSTER ✓</span></div></div></div>';
 }
@@ -711,24 +940,31 @@ function render(){
   var rest=feat?list.filter(function(p){return p.id!==feat.id}):list;
   var fs=document.getElementById("featuredSlot");
   if(feat){
-    fs.innerHTML='<article class="featured-card spot scroll-card" style="--delay:0s" data-open="'+feat.id+'" tabindex="0" role="button" aria-label="'+L(feat.title)+'">'
-    +'<div class="featured-copy"><span class="flag">'+t().featured+'</span>'+metaHtml(feat)
+    fs.innerHTML='<article class="win featured-card scroll-card" data-open="'+feat.id+'" tabindex="0" role="button" aria-label="'+L(feat.title)+'">'
+    +barHtml(feat,"APP")
+    +'<div class="featured-grid"><div class="featured-copy"><span class="flag">'+t().featured+'</span>'+metaHtml(feat)
     +'<h3>'+L(feat.title)+'</h3><p class="featured-desc">'+L(feat.desc)+'</p>'+chipsHtml(feat)+linksHtml(feat,true)
-    +'</div><div class="featured-visual">'+visualHtml(feat.id)+'</div></article>';
+    +'</div><div class="featured-visual">'+visualHtml(feat.id)+'</div></div></article>';
   } else fs.innerHTML="";
   document.getElementById("projList").innerHTML=rest.map(function(p,i){
-    return '<article class="proj-card spot scroll-card layout-'+p.id+'" style="--delay:'+(i*0.1)+'s" data-open="'+p.id+'" tabindex="0" role="button" aria-label="'+L(p.title)+'">'
-    +visualHtml(p.id)
-    +'<div class="proj-content"><div class="proj-top"><span class="proj-num">'+p.num+' / '+p.year+'</span>'+metaHtml(p)+'</div>'
-    +'<h3 class="proj-title">'+L(p.title)+'</h3><p class="proj-desc">'+L(p.desc)+'</p>'+chipsHtml(p)+linksHtml(p,false)
-    +'</div></article>';
+    var inner=visualHtml(p.id)
+      +'<div class="proj-content"><div class="proj-top"><span class="proj-num">No.'+p.num+'</span>'+metaHtml(p)+'</div>'
+      +'<h3 class="proj-title">'+L(p.title)+'</h3><p class="proj-desc">'+L(p.desc)+'</p>'+chipsHtml(p)+linksHtml(p,false)
+      +'</div>';
+    if(p.id==="grade-ocr-entry") inner='<div class="proj-split"><div class="proj-content"><div class="proj-top"><span class="proj-num">No.'+p.num+'</span>'+metaHtml(p)+'</div>'
+      +'<h3 class="proj-title">'+L(p.title)+'</h3><p class="proj-desc">'+L(p.desc)+'</p>'+chipsHtml(p)+linksHtml(p,false)
+      +'</div>'+visualHtml(p.id)+'</div>';
+    return '<article class="win proj-card scroll-card layout-'+p.id+'" style="--delay:'+(i*0.08)+'s" data-open="'+p.id+'" tabindex="0" role="button" aria-label="'+L(p.title)+'">'
+    +barHtml(p,"APP")+inner+'</article>';
   }).join("");
-  document.getElementById("emptyState").className="empty"+(list.length?"":" show");
+  document.getElementById("emptyState").className="empty win"+(list.length?"":" show");
   document.getElementById("resultCount").textContent=list.length+" "+t().projectsUnit;
   document.getElementById("principles").innerHTML=t().principles.map(function(pr,i){
-    return '<article class="principle reveal spot" data-variant="scale" data-num="0'+(i+1)+'" style="--delay:'+(i*0.12)+'s"><small>'+pr.k+'</small><h3>'+pr.t+'</h3><p>'+pr.d+'</p></article>';
+    return '<article class="win principle reveal" style="--delay:'+(i*0.1)+'s">'
+    +'<div class="win-bar"><span class="wb-ico">0'+(i+1)+'</span><span>'+pr.k+'</span><span class="win-btns" aria-hidden="true"><i>–</i><i>□</i><i>✕</i></span></div>'
+    +'<div class="win-body"><small>'+pr.k+'</small><h3>'+pr.t+'</h3><p>'+pr.d+'</p><span class="big-num" aria-hidden="true">0'+(i+1)+'</span></div></article>';
   }).join("");
-  bindProjectCards(); decorateGlass(); observeReveals();
+  bindProjectCards(); observeReveals();
 }
 function bindProjectCards(){
   document.querySelectorAll("[data-open]").forEach(function(el){
@@ -738,7 +974,7 @@ function bindProjectCards(){
 }
 function openReader(id){
   var p=null; PROJECTS.forEach(function(x){if(x.id===id)p=x}); if(!p)return;
-  document.getElementById("readerRepo").textContent="ybx77/"+p.id;
+  document.getElementById("readerRepo").textContent=p.id.toUpperCase()+".EXE — ybx77/"+p.id;
   document.getElementById("readerBody").innerHTML='<div class="reader-visual">'+visualHtml(p.id)+'</div>'
     +metaHtml(p)+'<h1>'+L(p.title)+'</h1><p class="lede">'+L(p.desc)+'</p><p class="para">'+L(p.para)+'</p>'
     +'<h5>'+t().keyPoints+'</h5><ul class="reader-points">'+L(p.points).map(function(x){return '<li><b>'+x[0]+'</b>'+x[1]+'</li>'}).join("")+'</ul>'
@@ -781,144 +1017,52 @@ document.querySelector(".lang-switch").addEventListener("click",function(e){
   var b=e.target.closest("button[data-lang]"); if(!b)return; applyLang(b.getAttribute("data-lang"));
 });
 
-/* ---------- motion & background ---------- */
+/* ---------- motion & background parallax ---------- */
 var revealObserver=null;
 function observeReveals(){
   var els=document.querySelectorAll(".reveal:not(.in), .scroll-card:not(.in), .reveal-slide:not(.in)");
   if(reduceMotion||!("IntersectionObserver" in window)){els.forEach(function(el){el.classList.add("in")});return;}
   if(!revealObserver){
-    revealObserver=new IntersectionObserver(function(entries){entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");revealObserver.unobserve(en.target);}})},{threshold:.14,rootMargin:"0px 0px -6% 0px"});
+    revealObserver=new IntersectionObserver(function(entries){entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");revealObserver.unobserve(en.target);}})},{threshold:.12,rootMargin:"0px 0px -5% 0px"});
   }
   els.forEach(function(el){revealObserver.observe(el)});
 }
 function initCounters(){
   var nums=document.querySelectorAll("[data-count]");
-  if(reduceMotion){nums.forEach(function(el){el.textContent=el.getAttribute("data-count")});return;}
-  nums.forEach(function(el){
-    var target=parseInt(el.getAttribute("data-count"),10)||0,start=null;
-    function step(ts){if(!start)start=ts;var p=Math.min((ts-start)/1100,1);var eased=1-Math.pow(1-p,3);el.textContent=Math.round(target*eased);if(p<1)requestAnimationFrame(step);}
-    setTimeout(function(){requestAnimationFrame(step)},350);
-  });
+  if(reduceMotion||!("IntersectionObserver" in window)){nums.forEach(function(el){el.textContent=el.getAttribute("data-count")});return;}
+  /* counts start only when the stats scroll into view — i.e. after the
+     visitor has swiped past the text-free intro screen */
+  var co=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(!en.isIntersecting)return; co.unobserve(en.target);
+      var el=en.target,target=parseInt(el.getAttribute("data-count"),10)||0,start=null;
+      function step(ts){if(!start)start=ts;var p=Math.min((ts-start)/1100,1);var eased=1-Math.pow(1-p,3);el.textContent=Math.round(target*eased);if(p<1)requestAnimationFrame(step);}
+      requestAnimationFrame(step);
+    });
+  },{threshold:.4});
+  nums.forEach(function(el){co.observe(el)});
 }
-function initSpotlight(){
-  document.addEventListener("pointermove",function(e){
-    var card=e.target.closest?e.target.closest(".spot"):null; if(!card)return;
-    var r=card.getBoundingClientRect();
-    card.style.setProperty("--mx",((e.clientX-r.left)/r.width*100)+"%");
-    card.style.setProperty("--my",((e.clientY-r.top)/r.height*100)+"%");
-  },{passive:true});
-}
-function initHeroParallax(){
-  if(reduceMotion||!window.matchMedia("(pointer:fine)").matches)return;
-  var stage=document.getElementById("heroStage"),card=document.getElementById("mainConsole");
-  stage.addEventListener("pointermove",function(e){
-    var r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-    card.style.setProperty("--ry",(x*4)+"deg"); card.style.setProperty("--rx",(-y*4)+"deg");
-  });
-  stage.addEventListener("pointerleave",function(){card.style.setProperty("--rx","0deg");card.style.setProperty("--ry","0deg")});
-}
+/* slow parallax: each illustration layer drifts at its own rate */
 function initScrollChrome(){
-  var bar=document.getElementById("scrollProgress"),header=document.getElementById("siteHeader"),ticking=false;
-  var grid=document.getElementById("bgGrid"),dots=document.getElementById("bgDots"),crosses=document.getElementById("bgCrosses");
-  var ornOne=document.getElementById("ornOne"),ornTwo=document.getElementById("ornTwo");
-  var stage=document.getElementById("heroStage");
+  var bar=document.getElementById("scrollProgress"),ticking=false;
+  var far=document.getElementById("bgFar"),mid=document.getElementById("bgMid"),near=document.getElementById("bgNear");
   function update(){
     var y=window.scrollY||0;
     var max=document.documentElement.scrollHeight-window.innerHeight;
     bar.style.width=(max>0?(y/max*100):0)+"%";
-    header.classList.toggle("scrolled",y>10);
     if(!reduceMotion){
-      /* each pattern layer drifts at its own speed — parallax depth */
-      if(grid)grid.style.transform="translate3d(0,"+(y*0.06)+"px,0)";
-      if(dots)dots.style.transform="translate3d(0,"+(y*-0.04)+"px,0)";
-      if(crosses)crosses.style.transform="translate3d(0,"+(y*0.11)+"px,0)";
-      if(ornOne)ornOne.style.transform="translate3d(0,"+(y*-0.07)+"px,0) rotate("+(y*0.018)+"deg)";
-      if(ornTwo)ornTwo.style.transform="translate3d(0,"+(y*0.05)+"px,0) rotate("+(y*-0.014)+"deg)";
-      /* hero console eases away slightly as it leaves the viewport */
-      if(stage&&y<window.innerHeight*1.2)stage.style.transform="translate3d(0,"+(y*0.09)+"px,0)";
+      if(far)far.style.transform="translate3d(0,"+(y*0.05)+"px,0)";
+      if(mid)mid.style.transform="translate3d(0,"+(y*0.1)+"px,0)";
+      if(near)near.style.transform="translate3d(0,"+(Math.min(y*0.16,110))+"px,0)";
     }
     ticking=false;
   }
   window.addEventListener("scroll",function(){if(!ticking){ticking=true;requestAnimationFrame(update)}},{passive:true}); update();
 }
-function initCanvas(){
-  var canvas=document.getElementById("bgCanvas"),ctx=canvas.getContext("2d"); if(!ctx)return;
-  var w=0,h=0,points=[],raf=null,dpr=Math.min(window.devicePixelRatio||1,2);
-  var mouse={x:-9999,y:-9999};
-  if(!reduceMotion)window.addEventListener("pointermove",function(e){mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});
-  var colors=["242,236,220","198,193,177","224,154,79"];
-  function resize(){
-    w=window.innerWidth;h=window.innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(dpr,0,0,dpr,0,0);
-    var count=Math.max(22,Math.min(60,Math.floor(w*h/30000))); points=[];
-    for(var i=0;i<count;i++)points.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.13,r:Math.random()*1.5+.5,c:colors[i%colors.length]});
-    if(reduceMotion)draw();
-  }
-  function draw(){
-    ctx.clearRect(0,0,w,h); var i,j,p,q,dx,dy,dist;
-    for(i=0;i<points.length;i++){p=points[i];
-      if(!reduceMotion){p.x+=p.vx;p.y+=p.vy;if(p.x<-20)p.x=w+20;if(p.x>w+20)p.x=-20;if(p.y<-20)p.y=h+20;if(p.y>h+20)p.y=-20;}
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle="rgba("+p.c+",.42)";ctx.fill();
-      for(j=i+1;j<points.length;j++){q=points[j];dx=p.x-q.x;dy=p.y-q.y;dist=dx*dx+dy*dy;
-        if(dist<11000){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle="rgba(242,236,220,"+(0.06*(1-dist/11000))+")";ctx.lineWidth=1;ctx.stroke();}}
-      /* particles near the pointer link to it — background reacts to the cursor */
-      var mdx=p.x-mouse.x,mdy=p.y-mouse.y,md=mdx*mdx+mdy*mdy;
-      if(md<22500){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(mouse.x,mouse.y);ctx.strokeStyle="rgba(224,154,79,"+(0.10*(1-md/22500))+")";ctx.lineWidth=1;ctx.stroke();}
-    }
-    if(!reduceMotion&&!document.hidden)raf=requestAnimationFrame(draw);
-  }
-  window.addEventListener("resize",resize);
-  document.addEventListener("visibilitychange",function(){if(document.hidden){if(raf)cancelAnimationFrame(raf);raf=null;}else if(!reduceMotion&&!raf)raf=requestAnimationFrame(draw);});
-  resize(); if(!reduceMotion)raf=requestAnimationFrame(draw);
-}
-
-/* ---------- liquid glass: lens map + layer injection ---------- */
-/* Inject the dispersion rim and specular sheen as DOM spans into every
-   glass module (render() re-calls this for dynamically built cards). */
-function decorateGlass(){
-  document.querySelectorAll(".console-card,.toolbar,.featured-card,.proj-card,.principle,.stack-strip").forEach(function(el){
-    if(el.querySelector(":scope > .lg-rim"))return;
-    var rim=document.createElement("span");rim.className="lg-rim";rim.setAttribute("aria-hidden","true");
-    var sheen=document.createElement("span");sheen.className="lg-sheen";sheen.setAttribute("aria-hidden","true");
-    el.insertBefore(sheen,el.firstChild);el.insertBefore(rim,el.firstChild);
-  });
-}
-/* Build the squircle displacement map once and enable the lens in
-   Chromium only. Surface profile y = (1-(1-x)^4)^(1/4) (convex squircle,
-   Snell n=1 -> 1.5): flat centre, displacement concentrated at the rim
-   via pow(t,5); 128 = neutral. The canvas is padded with a 20% neutral
-   margin matching the filter's -20%/140% region, so rim sampling never
-   reads transparent black. CSS.supports() cannot detect backdrop url()
-   support (Safari parses it, then renders nothing), so gate on the
-   engine instead; iOS browsers are all WebKit and are excluded. */
-function initLiquidGlass(){
-  var ua=navigator.userAgent||"";
-  var isIOS=/iPhone|iPad|iPod/.test(ua);
-  var isChromium=!isIOS&&/(Chrome|Chromium|Edg)\//.test(ua)&&!/Firefox\//.test(ua);
-  if(isChromium)document.documentElement.classList.add("chromium");
-  try{
-    var SZ=255,PAD=Math.round(SZ*0.2),FULL=SZ+2*PAD;
-    var c=document.createElement("canvas");c.width=c.height=FULL;
-    var ctx=c.getContext("2d");if(!ctx)return;
-    var im=ctx.createImageData(FULL,FULL),d=im.data,i;
-    for(i=0;i<d.length;i+=4){d[i]=128;d[i+1]=128;d[i+2]=128;d[i+3]=255;}
-    for(var y=0;y<SZ;y++)for(var x=0;x<SZ;x++){
-      var nx=x/(SZ-1)*2-1,ny=y/(SZ-1)*2-1;
-      var t=Math.min(Math.pow(Math.pow(Math.abs(nx),4)+Math.pow(Math.abs(ny),4),.25),1);
-      var e=Math.pow(t,5);
-      var idx=((y+PAD)*FULL+(x+PAD))*4;
-      d[idx]=128+nx*e*127;d[idx+1]=128+ny*e*127;d[idx+2]=128;d[idx+3]=255;
-    }
-    ctx.putImageData(im,0,0);
-    var url=c.toDataURL("image/png");
-    var fi=document.getElementById("lgLensMap");
-    if(fi){fi.setAttribute("href",url);fi.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href",url);}
-  }catch(err){/* lens is an enhancement; the blur/saturate layer remains */}
-}
 
 document.getElementById("heroVisual").innerHTML=visualHtml("switch-cloud-sync");
-initLiquidGlass();
 applyLang(currentLang);
-observeReveals(); initCounters(); initSpotlight(); initHeroParallax(); initScrollChrome(); initCanvas();
+observeReveals(); initCounters(); initScrollChrome();
 </script>
 </body>
 </html>
